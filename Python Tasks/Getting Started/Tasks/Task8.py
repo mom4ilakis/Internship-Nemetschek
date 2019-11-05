@@ -21,7 +21,19 @@ books = [
             "language": "English",
             "pages": 792
         }
-    }
+    },
+    {
+        "title": "1984",
+        "author": "G.Ourwell",
+        "genre": "	Dystopian",
+        "detail": {
+            "publication_year":1949,
+            "isbn-13": 123456789,
+            "language": "English",
+            "pages": 328
+        }       
+        }
+
 ]
 
 
@@ -38,6 +50,22 @@ def list_books():
 
 
      
+def find_book_by_title(title):
+
+    for book in books:
+        if book["title"] == title:
+            return book
+
+    return "None"
+
+def find_book(by_what,value):
+    
+    return [book for book in books if book[by_what] == value]
 
 
-list_books()
+print(find_book_by_title("Python Tricks: A Buffet of Awesome Python Features"))
+
+print(find_book("genre","programming Python"))
+
+
+
