@@ -56,7 +56,7 @@ def find_book_by_title(title):
         if book["title"] == title:
             return book
 
-    return "None"
+    return None;
 
 def find_book(by_what,value):
     
