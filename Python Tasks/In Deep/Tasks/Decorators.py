@@ -46,13 +46,10 @@ def cypher(shift_pos):
     return get_funct
 
 
-
-
-
 def log(file_name):
     def get_funct(func):
         def wrapper(*args, **kwargs):
-            output_file = open(file_name,"w")
+            output_file = open(file_name, "w")
             output_file.write(func(*args, **kwargs))
             output_file.close()
         return wrapper
@@ -72,9 +69,7 @@ def perfomance(file):
             val = func(*args, **kwargs)
             f_time = time.perf_counter()
             r_time = f_time - s_time
-        
-            log_file = open(file,"a")
-
+            log_file = open(file, "a")
             log_file.write(str(r_time))
 
             return val
@@ -83,11 +78,9 @@ def perfomance(file):
 
 @perfomance("per_log_1.txt")
 def heavy():
-    for i in range(1,10000000):
+    for i in range(1, 10000000):
         i*i
     print("Done!")
-   
+
 
 heavy()
-      
-
