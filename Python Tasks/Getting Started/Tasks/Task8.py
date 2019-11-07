@@ -38,34 +38,29 @@ books = [
 
 
 def list_books():
-    
     for b in books:
-       for k, v in b.items():
-         if isinstance(v,dict):
-             for k1,v1 in v.items():
-                 print(k1,":",v1)
-         else:
-             print(k,":",v)
-       print()
+        for k, v in b.items():
+            if isinstance(v, dict):
+                for k1, v1 in v.items():
+                    print(k1, ":", v1)
+            else:
+                print(k, ":", v)
+    print()
 
 
-     
 def find_book_by_title(title):
 
     for book in books:
         if book["title"] == title:
             return book
 
-    return None;
+    return None
 
-def find_book(by_what,value):
-    
+
+def find_book(by_what, value):
     return [book for book in books if book[by_what] == value]
 
 
 print(find_book_by_title("Python Tricks: A Buffet of Awesome Python Features"))
 
 print(find_book("genre","programming Python"))
-
-
-

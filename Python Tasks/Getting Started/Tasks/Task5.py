@@ -1,11 +1,10 @@
 
 def words_count(stringArray, word):
-    numSeen=0
+    num_seen = 0
     for str in stringArray:
         if(word == str):
-         numSeen+=1
-    return numSeen
+            num_seen += 1
+    return num_seen
 
 
-
-print(words_count(['list', 'python', 'word','word','word','word','word'], 'ord'))
+print(words_count(['list', 'python', 'word', 'word', 'word', 'word', 'word'], 'ord'))

@@ -1,7 +1,8 @@
 def createDic(start, finish):
-     d =  dict()
-     for i in range(start, finish+1):
-         d[i] = i%5
-     return d
+    created_dict = dict()
+    for i in range(start, finish+1):
+        created_dict[i] = i % 5
+    return created_dict
 
-print(createDic(3,5))
+
+print(createDic(3, 5))
