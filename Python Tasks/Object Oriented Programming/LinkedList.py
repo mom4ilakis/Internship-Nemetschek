@@ -1,6 +1,6 @@
 
 class DoubleLinkedList:
-    class Box:
+    class Node:
         def __init__(self, prev=None, next=None, data=None):
             self.prev = prev
             self.next = next
@@ -27,7 +27,7 @@ class DoubleLinkedList:
             tmp = tmp.next
 
     def __init__(self):
-        self.head = DoubleLinkedList.Box()
+        self.head = DoubleLinkedList.Node()
         self.tail = self.head
         self.size = 0
 
@@ -44,14 +44,14 @@ class DoubleLinkedList:
     def push_front(self, data):
 
         if self.empty():
-            self.head = DoubleLinkedList.Box(None, None, data)
+            self.head = DoubleLinkedList.Node(None, None, data)
             self.tail = self.head
         else:
             # saving the currnet head
             tmp = self.head
             # creating the new head of the list
-            self.head = DoubleLinkedList.Box(None, tmp, data)
-            # adding the prev box to last head
+            self.head = DoubleLinkedList.Node(None, tmp, data)
+            # adding the prev Node to last head
             tmp.prev = self.head
             # increasing the size of the list
         self.size += 1
@@ -66,8 +66,8 @@ class DoubleLinkedList:
             # saving the current tail to temp var
             tmp = self.tail
             # creating the new tail
-            self.tail = DoubleLinkedList.Box(tmp, None, data)
-            # setting the next box for the prev tail
+            self.tail = DoubleLinkedList.Node(tmp, None, data)
+            # setting the next Node for the prev tail
             tmp.next = self.tail
             # increasing the size of the list
         self.size += 1
