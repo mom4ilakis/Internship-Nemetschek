@@ -17,7 +17,7 @@ class BinaryTree:
             return
 
         tmp = self.root
-
+        # finding the right spot to insert the data
         while tmp:
             if data <= tmp.data:
                 if tmp.left_child is None:
