@@ -1,4 +1,13 @@
 def zip_with(func, *iterables):
+    args = list()
+    for tup in zip(*iterables):
+        args.clear()
+        for obj in tup:
+            args.append(obj)
+        yield func(*args)
+
+
+def zip_with_obsolete(func, *iterables):
     # if iterables is empty
     if len(iterables) == 0:
         yield list()
@@ -24,7 +33,7 @@ def concat_many(*args):
     return [res + i for i in args]
 
 
-first_names = ['John', 'Miles', "Doe"]
+first_names = ['John', 'Miles']
 last_names = ['Coltrane', 'Davis']
 spaces = [' '] * 2
 
