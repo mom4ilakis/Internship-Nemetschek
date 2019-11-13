@@ -1,27 +1,5 @@
-def zip_with(func, *iterables):
-    args = list()
-    for tup in zip(*iterables):
-        args.clear()
-        for obj in tup:
-            args.append(obj)
-        yield func(*args)
-
-
-def zip_with_obsolete(func, *iterables):
-    # if iterables is empty
-    if len(iterables) == 0:
-        yield list()
-    # finding the length of the shortest iterable
-    shortest = len(min(iterables, key=len))
-    # list of arguments to unpack for func
-    args = list()
-
-    for i in range(0, shortest):
-        # clearing argument list
-        args.clear()
-        for obj in iterables:
-            args.append(obj[i])
-        yield func(*args)
+def zip_with_map(func, *iterables):
+    yield list(map(func, *iterables))
 
 
 def concat3(x, y, z):
@@ -30,11 +8,13 @@ def concat3(x, y, z):
 
 def concat_many(*args):
     res = ""
-    return [res + i for i in args]
+    for a in args:
+        res += a
+    return res
 
 
 first_names = ['John', 'Miles']
 last_names = ['Coltrane', 'Davis']
 spaces = [' '] * 2
 
-print(list(zip_with(concat_many, first_names, spaces, last_names)))
+print(list(zip_with_map(concat_many, first_names, spaces, last_names)))
