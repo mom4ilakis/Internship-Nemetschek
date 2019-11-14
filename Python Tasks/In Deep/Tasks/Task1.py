@@ -18,8 +18,6 @@ def present():
     return lambda i: not isinstance(i, None)
 
 
-
-
 class Pred:
     def __init__(self, pred):
         self.pred = pred
