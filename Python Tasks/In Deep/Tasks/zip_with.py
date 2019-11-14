@@ -7,14 +7,11 @@ def concat3(x, y, z):
 
 
 def concat_many(*args):
-    res = ""
-    for a in args:
-        res += a
-    return res
+    return "".join(list(args))
 
 
 first_names = ['John', 'Miles']
 last_names = ['Coltrane', 'Davis']
 spaces = [' '] * 2
 
-print(list(zip_with_map(concat_many, first_names, spaces, last_names)))
+print(list(zip_with_map(concat_many, first_names, spaces, last_names))[0])
