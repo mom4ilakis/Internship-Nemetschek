@@ -18,28 +18,34 @@ def present():
     return lambda i: not isinstance(i, None)
 
 
-positive = gt(0)
-negative = lt(0)
-zero = eq(0)
-less_than_41 = lt(41)
-less_than_40 = lt(40)
-greater_than_41 = gt(41)
 
 
-def __and__(pred1):
-    return lambda pred2: pred1 and pred2
+class Pred:
+    def __init__(self, pred):
+        self.pred = pred
+
+    def __and__(self, pred1):
+        return Pred(self.pred and pred1)
+
+    def __or__(self, pred1):
+        return Pred(self.pred or pred1)
+
+    def __invert__(self):
+        return Pred(not self.pred)
+
+    def __rshift__(self, pred1):
+        return Pred(~self.pred or pred1)
+
+    def __call__(self, *args, **kwargs):
+        return self.pred(*args, **kwargs)
 
 
-def __or__(pred1):
-    return lambda pred2: pred1 or pred2
-
-
-def __invert__(pred):
-    return lambda: not pred
-
-
-def __rshift__(pred1):
-    return lambda pred2: ~pred1 or pred2
+positive = Pred(gt(0))
+negative = Pred(lt(0))
+zero = Pred(eq(0))
+less_than_41 = Pred(lt(41))
+less_than_40 = Pred(lt(40))
+greater_than_41 = Pred(gt(41))
 
 
 def for_any(*predicates):
