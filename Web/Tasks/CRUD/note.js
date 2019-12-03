@@ -1,33 +1,55 @@
-function uuid4() {
-    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16));
-}
-
 class Note {
-    constructor(srcTitle, content, id = uuid4()) {
-        this.title = srcTitle;
-        this.ID = id;
+    constructor(observer, title, content, target, id = uuid4()) {
+        this.title = title;
         this.content = content;
+        this.id = id;
+        this.observer = observer;
+        this.target = target || document.getElementById('note-area');
+        this.titleElement = document.createElement('textarea');
+        this.bodyElement = document.createElementBy('bodyBox');
     }
 
-    updateTitle(newTitle) {
-        this.title = newTitle;
+    render() {
+        this.titleElement.value = this.title;
+        this.bodyElement.value = this.content;
+        this.target.appendChild(this.titleElement);
+        this.target.appendChild(this.bodyElement);
+        this.addEvents();
     }
 
-    updateContent(newContent) {
-        this.content = newContent;
+    addEvents() {
+        this.titleElement.addEventListener('change', this.updateNoteAtr);
+        this.bodyElement.addEventListener('change', this.updateNoteAtr);
     }
 
-    createDomElement() {
-        const element = document.createElement('div');
-        element.setAttribute('id', this.ID);
-        element.innerHTML = this.title;
-        element.addEventListener('click', () => { page.loadNote(this); });
-
-        return element;
+    removeEvents() {
+        this.titleElement.removeEventListener('change', this.updateNoteAtr);
+        this.bodyElement.removeEventListener('change', this.updateNoteAtr);
     }
 
-    render(target) {
-        target.appendChild(this.createDomElement());
+    deleteElements() {
+        this.removeEvents();
+        this.titleElement.remove();
+        this.bodyElement.remove();
+    }
+
+    deleteNote() {
+        this.deleteElements();
+    }
+
+    updateNoteAtr() {
+        if (this.title !== this.titleElement.value) {
+            this.title = this.titleElement.value;
+        }
+
+        if (this.content !== this.bodyElement.value) {
+            this.title = this.bodyElement.value;
+        }
+
+       debounce(this.notify(), 100, false);
+    }
+
+    notify() {
+        this.observer.recieve(this);
     }
 }
