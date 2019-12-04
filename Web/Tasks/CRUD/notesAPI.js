@@ -13,7 +13,7 @@ const notesAPI = {
     },
 
     getNotes() {
-        return new Promise(JSON.parse(window.localStorage.getItem(NOTEBOOK_KEY)));
+        return Promise.resolve(JSON.parse(window.localStorage.getItem(NOTEBOOK_KEY)));
     },
 
     deleteAll() {

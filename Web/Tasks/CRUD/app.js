@@ -5,14 +5,14 @@ const buttons = {
     deleteAll: document.getElementById('deleteAllBtn')
 };
 
-const notebook = new Noteboook();
+const notebook = new Notebook();
 
 notebook.loadNotes();
 
 buttons.new.addEventListener('click', notebook.createNewNote);
 
-buttons.save.addEventListener('click', notebook.note.notify);
+//buttons.save.addEventListener('click', notebook.note.notify);
 
 buttons.delete.addEventListener('click', notebook.deleteLoadedNote);
 
-buttons.delete.addEventListener('click', notebook.delete)
+buttons.delete.addEventListener('click', notebook.delete);

@@ -1,4 +1,4 @@
-class Noteboook {
+class Notebook {
     constructor(target) {
         this.notes = {};
         this.note = null;
@@ -15,7 +15,17 @@ class Noteboook {
     }
 
     loadNotes() {
-        this.notes = notesAPI.getNotes().map(n => {return new Noteboook(n.title, n.content, n.ID); });
+        this.notes = notesAPI.getNotes()
+            .then(notes => {
+                const dict = {};
+                // notes.map(n => { return new Note(n.title, n.content, n.ID); }).forEach(note=> {
+                //     dict.set(note.ID, note);
+                // });
+                notes.forEach(note => {
+                    dict[note.ID] = new Note(note.title, note.content, note.ID);
+                });
+                return dict;
+            });
         this.renderTitles();
     }
 
