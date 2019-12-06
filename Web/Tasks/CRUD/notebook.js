@@ -1,59 +1,33 @@
 class Notebook {
-    constructor(target) {
-        this.notes = {};
-        this.note = null;
-        this.target = target || document.getElementById('notes-list');
+    constructor(notes) {
+        this.notes = notes || {};
+        messageService.subscribe('note-update', this.updateNote);
+        this.refresh();
     }
 
-    renderTitles() {
-        Object.keys(this.notes).forEach(key => {
-            const element = document.createElement('li');
-            element.setAttribute('id',this.notes[key].ID);
-            element.addEventListener('click', this.notes[key].render);
-            this.target.appendChild(element);
-        });
+    updateNote(note) {
+        this.notes[note.id] = note;
+        debounce(notesAPI.saveNote(note));
     }
 
-    loadNotes() {
-        this.notes = notesAPI.getNotes()
-            .then(notes => {
-                const dict = {};
-                // notes.map(n => { return new Note(n.title, n.content, n.ID); }).forEach(note=> {
-                //     dict.set(note.ID, note);
-                // });
-                notes.forEach(note => {
-                    dict[note.ID] = new Note(note.title, note.content, note.ID);
-                });
-                return dict;
+    refresh() {
+        this.notes = notesAPI.getNotes().then(notes => {
+            const newNotes = {};
+            Object.keys(notes).forEach(key => {
+                newNotes[notes[key].ID] = new Note(notes[key].title, notes[key].body, notes[key].msgService, notes[key].ID);
             });
-        this.renderTitles();
+            return newNotes;
+        }) || {};
     }
 
-    createNewNote() {
-        this.note = new Note(this, 'Untitled', '');
-        this.note.render();
-        notesAPI.saveNote(this.note);
-        this.notes[this.note.ID] = this.note;
-
+    addNote(newNote) {
+        notesAPI.saveNote(newNote);
+        this.notes[newNote.ID] = newNote;
     }
 
-    recieve(note) {
-        this.note = note;
-        this.notes[note.ID] = note;
-        // updating the storage
-        notesAPI.saveNote(note);
-        // getting the new notes
-        this.loadNotes();
-    }
-
-    deleteAll() {
-        Object.keys(this.notes).forEach( key =>{
-            this.notes[key].deleteNote();
+    deleteNote(noteID) {
+        notesAPI.deleteNote(this.notes[noteID]).then(() => {
+            delete this.notes[noteID];
         });
-        this.note = null;
-    }
-
-    deleteLoadedNote() {
-        this.note.deleteNote();
     }
 }
