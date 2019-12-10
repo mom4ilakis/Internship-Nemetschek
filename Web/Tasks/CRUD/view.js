@@ -61,8 +61,10 @@ class Page {
 
     static removeButton(id, func) {
         const button = document.getElementById(id);
-        button.removeEventListener('click', func);
-        button.remove();
+        if(button){
+            button.removeEventListener('click', func);
+            button.remove();
+        }
     }
 
     drawNewButton() {
