@@ -1,33 +1,37 @@
 class Notebook {
     constructor(notes) {
         this.notes = notes || {};
-        messageService.subscribe('note-update', this.updateNote);
-        this.refresh();
+        this.updateNote = this.updateNote.bind(this);
     }
 
     updateNote(note) {
-        this.notes[note.id] = note;
-        debounce(notesAPI.saveNote(note));
+        this.notes[note.ID] = note;
     }
 
-    refresh() {
-        this.notes = notesAPI.getNotes().then(notes => {
-            const newNotes = {};
-            Object.keys(notes).forEach(key => {
-                newNotes[notes[key].ID] = new Note(notes[key].title, notes[key].body, notes[key].msgService, notes[key].ID);
+    load() {
+        return notesAPI.getNotes()
+            .then(notes => {
+                const newNotes = {};
+                Object.keys(notes).forEach(key => {
+                    newNotes[notes[key].ID] = new Note(notes[key].title, notes[key].body, notes[key].ID);
+                });
+                this.notes = newNotes;
             });
-            return newNotes;
-        }) || {};
     }
 
     addNote(newNote) {
-        notesAPI.saveNote(newNote);
         this.notes[newNote.ID] = newNote;
+        newNote.save();
     }
 
     deleteNote(noteID) {
-        notesAPI.deleteNote(this.notes[noteID]).then(() => {
-            delete this.notes[noteID];
+       this.notes[noteID].delete();
+       delete this.notes[noteID];
+    }
+
+    deleteAll() {
+        Object.keys(this.notes).forEach(key=> {
+            this.deleteNote(key);
         });
     }
 }

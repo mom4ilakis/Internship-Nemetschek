@@ -13,8 +13,9 @@ const notesAPI = {
     },
 
     deleteNote(note) {
-        const oldNotes = JSON.parse(window.localStorage.getItem(NOTEBOOK_KEY));
-        delete oldNotes[note.ID];
+        const notes = JSON.parse(window.localStorage.getItem(NOTEBOOK_KEY));
+        delete notes[note.ID];
+        window.localStorage.setItem(NOTEBOOK_KEY, JSON.stringify(notes));
         return Promise.resolve(null);
     },
 

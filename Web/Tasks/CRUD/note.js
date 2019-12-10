@@ -7,20 +7,19 @@ class Note {
 
     updateBody(newBody) {
         this.body = newBody;
-        messageService.publish(this);
+        this.save();
     }
 
     updateTitle(newTitle) {
         this.title = newTitle;
-        messageService.publish(updateNote, this);
+        this.save();
     }
 
-    update() {
-        notesAPI.updateNote(this)
-            .then(newData => {
-                // this.title = newData.title;
-                // this.body = newData.body;
-                messageService.publish(updateNote, this);
-            });
+    save() {
+        debounce(notesAPI.saveNote(this));
+    }
+
+    delete() {
+        notesAPI.deleteNote(this);
     }
 }
