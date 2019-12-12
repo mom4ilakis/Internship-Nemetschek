@@ -1,7 +1,5 @@
 const NOTEBOOK_KEY = 'notebook';
-const notesAPI = {
-
-
+window.notesAPI = {
     saveNote(note) {
         const oldNotes = JSON.parse(window.localStorage.getItem(NOTEBOOK_KEY));
         window.localStorage.setItem(NOTEBOOK_KEY, JSON.stringify({ ...oldNotes, [note.ID]: note }));
