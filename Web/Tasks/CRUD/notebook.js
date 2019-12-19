@@ -1,6 +1,6 @@
 class Notebook {
-    constructor(notes) {
-        this.notes = notes || {};
+    constructor() {
+        this.notes = {};
         this.updateNote = this.updateNote.bind(this);
     }
 
@@ -25,13 +25,14 @@ class Notebook {
     }
 
     deleteNote(noteID) {
-       this.notes[noteID].delete();
-       delete this.notes[noteID];
+        this.notes[noteID].delete();
+        delete this.notes[noteID];
     }
 
     deleteAll() {
-        Object.keys(this.notes).forEach(key=> {
+        Object.keys(this.notes).forEach(key => {
             this.deleteNote(key);
         });
     }
 }
+module.exports = Notebook;

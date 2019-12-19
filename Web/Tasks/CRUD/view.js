@@ -61,14 +61,14 @@ class Page {
 
     static removeButton(id, func) {
         const button = document.getElementById(id);
-        if(button){
+        if (button){
             button.removeEventListener('click', func);
             button.remove();
         }
     }
 
     drawNewButton() {
-        if(!document.getElementById('new-btn')) {
+        if (!document.getElementById('new-btn')) {
             this.drawButton('new-btn', this.newNote).innerHTML = 'New Note';
         }
     }
@@ -78,7 +78,7 @@ class Page {
     }
 
     drawDeleteButton() {
-        if(!document.getElementById('del-btn')) {
+        if (!document.getElementById('del-btn')) {
             this.drawButton('del-btn', this.deleteNote).innerHTML = 'Delete Note';
         }
     }
