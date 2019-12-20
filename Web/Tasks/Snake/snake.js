@@ -4,6 +4,7 @@ var Snake = function(gameBoard, x, y) {
     let energy = 1;
     let length = 1;
     let board = gameBoard;
+    let boxSize = 10;
     let direction = {
         none: 0,
         up: 1,
@@ -11,6 +12,9 @@ var Snake = function(gameBoard, x, y) {
         down: 3,
         left: 4
     };
+    
+    let body = [new SnakeSegmnet(board, posX, posY)];
+
     let currentDirection = direction.none;
 
     function moveUp() {
@@ -63,8 +67,12 @@ var Snake = function(gameBoard, x, y) {
         return length;
     }
 
-    function changeLength(delta) {
+    function addLength(delta) {
         length+= delta;
+        for(let i = 0; i < delta; ++i){
+            body.push(new SnakeSegmnet(board, 
+                body[i].getX() + boxSize, body[i].getY())+ boxSize);
+        }
         
         if(length <= 0 ){
             board.endGame();
@@ -72,8 +80,9 @@ var Snake = function(gameBoard, x, y) {
     }
 
     function draw() {
-        //to do draw a bunch of rectangles
-        //board holds the canvas
+        body.forEach((segment => {
+            segment.draw();
+        }));
     }
 
     return {
@@ -86,7 +95,7 @@ var Snake = function(gameBoard, x, y) {
         getEnergy: getEnergy,
         changeEnergy: changeEnergy,
         getLength: getLength,
-        changeLength: changeLength,
+        addLength: addLength,
     };
 };
 
