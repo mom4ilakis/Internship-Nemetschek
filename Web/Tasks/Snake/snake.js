@@ -1,3 +1,5 @@
+const SnakeSegment = require('./snakeSegment');
+
 var Snake = function(gameBoard, x, y) {
     let posX = x;
     let posY = y;
@@ -13,7 +15,7 @@ var Snake = function(gameBoard, x, y) {
         left: 4
     };
     
-    let body = [new SnakeSegmnet(board, posX, posY)];
+    let body = [new SnakeSegment(board, posX, posY, 30)];
 
     let currentDirection = direction.none;
 
@@ -40,6 +42,14 @@ var Snake = function(gameBoard, x, y) {
             currentDirection = direction.right;
             posY+=(1 * energy);
         }
+    }
+
+    function setX(newX) {
+        posX = newX;
+    }
+
+    function setY(newY) {
+        posY= newY;
     }
     
     function getX() {
@@ -92,6 +102,8 @@ var Snake = function(gameBoard, x, y) {
         moveRight: moveRight,
         getX: getX,
         getY: getY,
+        setY : setY,
+        setX : setX,
         getEnergy: getEnergy,
         changeEnergy: changeEnergy,
         getLength: getLength,
