@@ -1,33 +1,35 @@
+/* eslint-disable no-var */
+//const Square = require('./square');
+
 var SnakeSegment = function(Gboard, x, y, segmentSize = 100) {
-    let posX = x;
-    let posY = y;
-    let board = Gboard;
-    let size = segmentSize;
+    const square = new Square(x, y, segmentSize);
+    const board = Gboard;
+    console.log(board);
 
     function draw() {
         const context = board.getContext('2d');
         context.fillStyle = 'green';
-        context.fillRect(posX, posY, size, size);
+        context.fillRect(square.getX(), square.getY(), square.getSize(), square.getSize());
     }
     function getSize() {
-        return size;
+        return square.getSize();
     }
     function setSize(newSize) {
-        if(newSize > 0) {
-            size = newSize;
+        if (newSize > 0) {
+            square.setSize(newSize);
         }
     }
     function getX() {
-        return posX;
+        return square.getX();
     }
     function getY() {
-        return posY;
+        return square.getY();
     }
-    function setX(x) {
-        posX = x;
+    function setX(newX) {
+        square.setX(newX);
     }
-    function setY(y) {
-        posY = y;
+    function setY(newY) {
+        square.setY(newY);
     }
 
 
