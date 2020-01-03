@@ -1,13 +1,12 @@
 /* eslint-disable no-var */
 //const Square = require('./square');
 
-var SnakeSegment = function(Gboard, x, y, segmentSize = 100) {
+var SnakeSegment = function(Gboard, x, y, segmentSize = 35) {
     const square = new Square(x, y, segmentSize);
     const board = Gboard;
-    console.log(board);
 
     function draw() {
-        const context = board.getContext('2d');
+        const context = board.getContext('2d', { alpha: false });
         context.fillStyle = 'green';
         context.fillRect(square.getX(), square.getY(), square.getSize(), square.getSize());
     }
@@ -31,16 +30,18 @@ var SnakeSegment = function(Gboard, x, y, segmentSize = 100) {
     function setY(newY) {
         square.setY(newY);
     }
-
-
+    function collision(segment) {
+        square.collision(segment);
+    }
     return {
-        draw : draw,
-        getX : getX,
-        getY : getY,
-        setX : setX,
-        setY : setY,
-        getSize : getSize,
-        setSize : setSize,
+        draw,
+        getX,
+        getY,
+        setX,
+        setY,
+        getSize,
+        setSize,
+        collision,
     };
 };
 module.exports = SnakeSegment;
