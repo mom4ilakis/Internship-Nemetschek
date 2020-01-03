@@ -6,6 +6,7 @@ var Snake = function (gameBoard, x, y, snakeSize) {
     let length = 1;
     const board = gameBoard;
     let size = snakeSize;
+    let observers = [];
     const direction = {
         none: 0,
         up: 1,
@@ -16,46 +17,67 @@ var Snake = function (gameBoard, x, y, snakeSize) {
     const body = [new SnakeSegment(board, x, y, size)];
     const head = body[0];
     let currentDirection = direction.none;
-
+    function notify(msg) {
+        observers.forEach(observer => {
+            observer.notify(msg);
+        });
+    }
     function draw() {
         body.forEach((segment => {
             segment.draw();
         }));
     }
+    function eatsTail() {
+        body.filter(segment => segment !== head).forEach(segment => {
+            if (head.collision(segment)) {
+                notify('death');
+            }
+        });
+    }
+    function reachedBorder() {
+        if (head.getX() < 0 || head.getX() > board.widht
+            || head.getY() < 0 || head.getY > board.height) {
+            notify('death');
+        }
+    }
     function moveUp() {
         if (currentDirection !== direction.down) {
             currentDirection = direction.up;
             body.forEach(segment => {
-                segment.setX(segment.getX() - (1 * energy));
+                segment.setY(segment.getY() - (1 * energy));
             });
-            draw();
+            eatsTail();
+            reachedBorder();
         }
     }
     function moveDown() {
         if (currentDirection !== direction.up) {
             currentDirection = direction.down;
             body.forEach(segment => {
-                segment.setX(segment.getX() + (1 * energy));
+                segment.setY(segment.getY() + (1 * energy));
             });
-            draw();
+            eatsTail();
+            reachedBorder();
         }
     }
     function moveLeft() {
         if (currentDirection !== direction.right) {
             currentDirection = direction.left;
             body.forEach(segment => {
-                segment.setY(segment.getY() - (1 * energy));
+                segment.setX(segment.getX() - (1 * energy));
             });
-            draw();
+            eatsTail();
+            reachedBorder();
         }
     }
     function moveRight() {
         if (currentDirection !== direction.left) {
             currentDirection = direction.right;
             body.forEach(segment => {
-                segment.setY(segment.getY() + (1 * energy));
+                segment.setX(segment.getX() + (1 * energy));
             });
-            draw();
+            eatsTail();
+            reachedBorder();
         }
     }
     function setSize(newSize) {
@@ -63,7 +85,6 @@ var Snake = function (gameBoard, x, y, snakeSize) {
         body.forEach(segment => {
             segment.setSize(size);
         });
-        draw();
     }
     function setX(newX) {
         head.setX(newX);
@@ -81,7 +102,7 @@ var Snake = function (gameBoard, x, y, snakeSize) {
         return energy;
     }
     function changeEnergy(delta) {
-        energy *= delta;
+        energy *= (delta / 100);
 
         if (energy <= 0) {
             energy = 1;
@@ -98,29 +119,58 @@ var Snake = function (gameBoard, x, y, snakeSize) {
         }
 
         if (length <= 0) {
-            board.endGame();
+            notify('death');
         }
-        draw();
+    }
+    function continueMoving() {
+        switch (currentDirection) {
+        case direction.up:
+            moveUp();
+            notify('moved');
+            break;
+        case direction.down:
+            moveDown();
+            notify('moved');
+            break;
+        case direction.left:
+            moveLeft();
+            notify('moved');
+            break;
+        case direction.right:
+            moveRight();
+            notify('moved');
+            break;
+        default:
+        }
     }
     function getHead() {
         return head;
     }
+    function subscribe(newObserver) {
+        observers.push(newObserver);
+    }
+    function unsubscribe(oldObserver) {
+        observers = observers.filter(obs => obs !== oldObserver);
+    }
     return {
-        moveUp : moveUp,
-        moveDown: moveDown,
-        moveLeft: moveLeft,
-        moveRight: moveRight,
-        getX: getX,
-        getY: getY,
-        setY : setY,
-        setX : setX,
-        getEnergy: getEnergy,
-        changeEnergy: changeEnergy,
-        getLength: getLength,
-        addLength: addLength,
-        draw: draw,
-        setSize: setSize,
-        getHead: getHead,
+        moveUp,
+        moveDown,
+        moveLeft,
+        moveRight,
+        getX,
+        getY,
+        setY,
+        setX,
+        getEnergy,
+        changeEnergy,
+        getLength,
+        addLength,
+        draw,
+        setSize,
+        getHead,
+        subscribe,
+        unsubscribe,
+        continueMoving,
     };
 };
 
