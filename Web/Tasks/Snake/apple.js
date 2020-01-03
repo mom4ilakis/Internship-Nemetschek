@@ -1,15 +1,28 @@
 /* eslint-disable no-var */
 //const Square = require('./square');
 
-var Apple = function (gameBoard, appleEnergy, x, y, appleSize = 100) {
+var Apple = function (gameBoard, appleEnergy, x, y, appleSize = 20) {
     const energy = appleEnergy;
     const board = gameBoard;
     const square = new Square(x, y, appleSize);
+    let observers = [];
 
+    function subscribe(newObserver) {
+        observers.push(newObserver);
+    }
+    function unsubscribe(oldObserver) {
+        observers = observers.filter(obs => obs !== oldObserver);
+    }
+    function notify(msg) {
+        observers.forEach(observer => {
+            observer.notify(msg, this);
+        });
+    }
     function collide(snake) {
-        if (square.collide(snake.getHead())) {
+        if (square.collision(snake.getHead())) {
             snake.changeEnergy(energy);
             snake.addLength(1);
+            notify('ateApple');
         }
     }
     function getX() {
@@ -25,17 +38,19 @@ var Apple = function (gameBoard, appleEnergy, x, y, appleSize = 100) {
         square.setY(newY);
     }
     function draw() {
-        const contex = board.getContex('2d');
+        const contex = board.getContext('2d', { alpha: false });
         contex.fillStyle = 'red';
-        contex.fillRect(square.getX(), square.getY(), square.getSuze(), square.getSuze());
+        contex.fillRect(square.getX(), square.getY(), square.getSize(), square.getSize());
     }
     return {
-        draw: draw,
-        getX: getX,
-        getY: getY,
-        setX: setX,
-        setY: setY,
-        collide: collide,
+        draw,
+        getX,
+        getY,
+        setX,
+        setY,
+        collide,
+        subscribe,
+        unsubscribe,
     };
 };
 module.exports = Apple;
