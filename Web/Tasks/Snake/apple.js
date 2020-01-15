@@ -1,5 +1,5 @@
 /* eslint-disable no-var */
-//const Square = require('./square');
+// const Square = require('./square');
 
 var Apple = function (gameBoard, appleEnergy, x, y, appleSize = 20) {
     const energy = appleEnergy;
@@ -22,7 +22,7 @@ var Apple = function (gameBoard, appleEnergy, x, y, appleSize = 20) {
         if (square.collision(snake.getHead())) {
             snake.changeEnergy(energy);
             snake.addLength(1);
-            notify('ateApple');
+            notify('ateApple', this);
         }
     }
     function getX() {
