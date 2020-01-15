@@ -2,7 +2,7 @@
 //const SnakeSegment = require('./snakeSegment');
 
 var Snake = function (gameBoard, x, y, snakeSize) {
-    let energy = 1;
+    let energy = 12;
     let length = 1;
     const board = gameBoard;
     let size = snakeSize;
@@ -18,6 +18,8 @@ var Snake = function (gameBoard, x, y, snakeSize) {
     };
     const body = [new SnakeSegment(board, x, y, size)];
     const head = body[0];
+    let tail = body[body.length - 1];
+    let toMove = false;
     let currentDirection = direction.none;
     function notify(msg) {
         observers.forEach(observer => {
@@ -37,17 +39,33 @@ var Snake = function (gameBoard, x, y, snakeSize) {
         });
     }
     function reachedBorder() {
-        if (head.getX() < 0 || head.getX() > board.widht
-            || head.getY() < 0 || head.getY > board.height) {
+        if (head.getX() <= 0 || head.getX() >= board.widht
+            || head.getY() <= 0 || head.getY() >= board.height) {
             notify('death');
+        }
+    }
+    function moveBody() {
+        for (let i = 1; i < body.length - 1; ++i) {
+            body[i].setX(body[i-1].getX());
+            body[i].setY(body[i-1].getY());
+        }
+    }
+    function moveTail() {
+        if(toMove){
+            if(body.length >= 2){
+                tail.setX(body[body.length - 2].getX());
+                tail.setY(body[body.length - 2].getY());
+            }
+        } else {
+            toMove = true
         }
     }
     function moveUp() {
         if (currentDirection !== direction.down) {
             currentDirection = direction.up;
-            body.forEach(segment => {
-                segment.setY(segment.getY() - (1 * energy));
-            });
+            moveBody();
+            head.setY(head.getY() - 1 * energy);
+            moveTail();
             eatsTail();
             reachedBorder();
         }
@@ -55,9 +73,9 @@ var Snake = function (gameBoard, x, y, snakeSize) {
     function moveDown() {
         if (currentDirection !== direction.up) {
             currentDirection = direction.down;
-            body.forEach(segment => {
-                segment.setY(segment.getY() + (1 * energy));
-            });
+            moveBody();
+            head.setY(head.getY() + 1 * energy);
+            moveTail();
             eatsTail();
             reachedBorder();
         }
@@ -65,9 +83,9 @@ var Snake = function (gameBoard, x, y, snakeSize) {
     function moveLeft() {
         if (currentDirection !== direction.right) {
             currentDirection = direction.left;
-            body.forEach(segment => {
-                segment.setX(segment.getX() - (1 * energy));
-            });
+            moveBody();
+            head.setX(head.getX() - 1 * energy);
+            moveTail();
             eatsTail();
             reachedBorder();
         }
@@ -75,9 +93,9 @@ var Snake = function (gameBoard, x, y, snakeSize) {
     function moveRight() {
         if (currentDirection !== direction.left) {
             currentDirection = direction.right;
-            body.forEach(segment => {
-                segment.setX(segment.getX() + (1 * energy));
-            });
+            moveBody();
+            head.setX(head.getX() + 1 * energy);
+            moveTail();
             eatsTail();
             reachedBorder();
         }
@@ -104,7 +122,7 @@ var Snake = function (gameBoard, x, y, snakeSize) {
         return energy;
     }
     function changeEnergy(delta) {
-        energy *= (delta / 100);
+        // energy += (delta / 100);
 
         if (energy <= 0) {
             energy = 1;
@@ -113,19 +131,16 @@ var Snake = function (gameBoard, x, y, snakeSize) {
     function getLength() {
         return length;
     }
-    function addLength(delta) {
-        length += delta;
-        for (let i = 0; i < delta; ++i) {
-            body.push(new SnakeSegment(board,
-                body[i].getX() + size, body[i].getY() + size, size));
-        }
-
-        if (length <= 0) {
-            notify('death');
-        }
+    function addLength() {
+        length += 1;
+        
+        body.push(new SnakeSegment(board, body[body.length-1].getX(), body[body.length-1].getY(), size));
+        tail = body[body.length - 1];
+        toMove = false;
     }
     function displayCoordinates() {
-        displayCoor.innerHTML = 'snake head X: ${head.getX()};Y: ${head.getY()};Direction: ${currentDirection};Energy: ${energy}';
+        const info =`snake head\nX: ${head.getX()}\nY: ${head.getY()}\nDirection: ${currentDirection}\nEnergy: ${energy}\nLength:${length}`;
+        displayCoor.innerHTML = info;
     }
     function continueMoving() {
         switch (currentDirection) {
