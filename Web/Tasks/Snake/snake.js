@@ -7,6 +7,8 @@ var Snake = function (gameBoard, x, y, snakeSize) {
     const board = gameBoard;
     let size = snakeSize;
     let observers = [];
+    let displayCoor = document.getElementById('snkCoor');
+
     const direction = {
         none: 0,
         up: 1,
@@ -122,22 +124,29 @@ var Snake = function (gameBoard, x, y, snakeSize) {
             notify('death');
         }
     }
+    function displayCoordinates() {
+        displayCoor.innerHTML = 'snake head X: ${head.getX()};Y: ${head.getY()};Direction: ${currentDirection};Energy: ${energy}';
+    }
     function continueMoving() {
         switch (currentDirection) {
         case direction.up:
             moveUp();
+            displayCoordinates();
             notify('moved');
             break;
         case direction.down:
             moveDown();
+            displayCoordinates();
             notify('moved');
             break;
         case direction.left:
             moveLeft();
+            displayCoordinates();
             notify('moved');
             break;
         case direction.right:
             moveRight();
+            displayCoordinates();
             notify('moved');
             break;
         default:
