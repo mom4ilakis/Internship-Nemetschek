@@ -13,17 +13,20 @@ var Apple = function (gameBoard, appleEnergy, x, y, appleSize = 20) {
     function unsubscribe(oldObserver) {
         observers = observers.filter(obs => obs !== oldObserver);
     }
-    function notify(msg) {
+    function notify(msg, ...others) {
         observers.forEach(observer => {
-            observer.notify(msg, this);
+            observer.notify(msg, ...others);
         });
     }
     function collide(snake) {
+        let field = document.getElementById('collDetec');
         if (square.collision(snake.getHead())) {
+            field.innerHTML = 'true';
             snake.changeEnergy(energy);
-            snake.addLength(1);
+            snake.addLength();
             notify('ateApple', this);
         }
+        field.innerHTML = 'false';
     }
     function getX() {
         return square.getX();
