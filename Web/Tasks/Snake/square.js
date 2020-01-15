@@ -7,10 +7,11 @@ var Square = function (posX, posY, squareSize) {
     function collision(otherSquare) {
         if (x < otherSquare.getX() + otherSquare.getSize()
             && x + size > otherSquare.getX()
-            && y < otherSquare.getX() + otherSquare.getSize()
+            && y < otherSquare.getY() + otherSquare.getSize()
             && y + size > otherSquare.getY()) {
             return true;
         }
+        
         return false;
     }
 
