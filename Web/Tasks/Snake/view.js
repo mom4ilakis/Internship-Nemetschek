@@ -7,7 +7,7 @@ class GameBoard {
         this.loadBtn = document.getElementById('loadBtn');
         this.draw = this.draw.bind(this);
         this.apples = [];
-        this.snake = new Snake(target, 100, 100, this.objSize);
+        this.snake = new Snake(target, 144, 144, this.objSize);
         this.addMovementHandling = this.addMovementHandling.bind(this);
         this.handleMovement = this.handleMovement.bind(this);
         this.placeNewApple = this.placeNewApple.bind(this);
@@ -20,7 +20,7 @@ class GameBoard {
         setInterval(() => {
             this.draw();
             this.snake.continueMoving()
-        }, 33);
+        }, 100);
     }
 
     startGame() {
@@ -33,8 +33,8 @@ class GameBoard {
     notify(msg, ...others) {
         switch (msg) {
         case 'death':
-            this.gameOn = false;
-            break;
+            delete this.snake;
+            delete this.apples;
         case 'ateApple':
             this.apples = this.apples.filter(apple => apple !== others[0]);
             this.placeNewApple();
