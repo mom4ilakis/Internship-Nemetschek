@@ -6,21 +6,30 @@ class GameBoard {
         this.canvas = target;
         this.loadBtn = document.getElementById('loadBtn');
         this.draw = this.draw.bind(this);
-        this.apples = [];
+        this.apple = null;
         this.snake = new Snake(target, 144, 144, this.objSize);
+        this.gameOn = false;
         this.addMovementHandling = this.addMovementHandling.bind(this);
         this.handleMovement = this.handleMovement.bind(this);
         this.placeNewApple = this.placeNewApple.bind(this);
         this.snake.subscribe(this);
         this.startGame = this.startGame.bind(this);
         this.loadBtn.addEventListener('click', this.startGame);
+        this.gameLoop = this.gameLoop.bind(this);
+        this.update = this.update.bind(this);
+    }
+
+    update() {
+        this.snake.move();
     }
 
     gameLoop() {
-        setInterval(() => {
-            this.draw();
-            this.snake.continueMoving()
-        }, 100);
+        this.draw();
+        window.requestAnimationFrame(this.update);
+    }
+
+    clearCanvas() {
+        this.canvas.width = this.canvas.width;
     }
 
     startGame() {
@@ -34,16 +43,17 @@ class GameBoard {
         switch (msg) {
         case 'death':
             delete this.snake;
-            delete this.apples;
+            delete this.apple;
+            this.clearCanvas();
+            this.gameOn = false;
+            break;
         case 'ateApple':
-            this.apples = this.apples.filter(apple => apple !== others[0]);
+            this.snake.eat();
             this.placeNewApple();
             this.draw();
             break;
         case 'moved':
-            this.apples.forEach(apple => {
-                apple.collide(this.snake);
-            });
+            this.apple.collide(this.snake);
             this.draw();
             break;
         default:
@@ -51,53 +61,50 @@ class GameBoard {
     }
 
     addMovementHandling() {
-        this.canvas.setAttribute('tabindex', 0);
-        this.canvas.addEventListener('keydown', this.handleMovement);
+        window.addEventListener('keydown', this.handleMovement);
     }
 
     handleMovement(event) {
         switch (event.keyCode) {
         case 37:
             this.snake.moveLeft();
-            this.snake.continueMoving();
             break;// left
         case 38:
             this.snake.moveUp();
-            this.snake.continueMoving();
             break;// up
         case 39:
             this.snake.moveRight();
-            this.snake.continueMoving();
             break;// right
         case 40:
             this.snake.moveDown();
-            this.snake.continueMoving();
             break;// down
         default:
-            this.snake.continueMoving();
             break;
         }
     }
 
     placeNewApple() {
-        const x = Math.random() * this.canvas.width;
-        const y = Math.random() * this.canvas.height;
+        const x = Math.random() * (this.canvas.width - 2 * this.objSize) + 2 * this.objSize;
+        const y = Math.random() * (this.canvas.height - 2 * this.objSize) + 2 * this.objSize;
         const energy = Math.random() * 100;
         const apple = new Apple(this.canvas, energy, x, y, this.objSize);
 
-        if (apple.collide(this.snake)) {
-            this.placeNewApple();
-        } else {
-            apple.subscribe(this);
-            this.apples.push(apple);
-        }
+        this.snake.getBody().forEach(segment => {
+            if (segment.collision(apple)) {
+                this.placeNewApple();
+            }
+        });
+        apple.subscribe(this);
+        this.apple = apple;
     }
 
     draw() {
-        this.canvas.getContext('2d').clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.clearCanvas();
+        const cntx = this.canvas.getContext('2d');
+        cntx.fillStyle = 'purple';
+        cntx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        cntx.clearRect(30, 30, this.canvas.width - 60, this.canvas.height - 60);
         this.snake.draw();
-        this.apples.forEach(apple => {
-            apple.draw();
-        });
+        this.apple.draw();
     }
 }
