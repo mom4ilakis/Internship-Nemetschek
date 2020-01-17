@@ -1,59 +1,57 @@
-/* eslint-disable no-var */
-// const Square = require('./square');
+// const Square = require('./this.square');
 
-var Apple = function (gameBoard, appleEnergy, x, y, appleSize = 20) {
-    const energy = appleEnergy;
-    const board = gameBoard;
-    const square = new Square(x, y, appleSize);
-    let observers = [];
+class Apple {
+    constructor(gameBoard, appleEnergy, x, y, appleSize = 20) {
+        this.board = gameBoard;
+        this.square = new Square(x, y, appleSize);
+        this.observers = [];
+    }
 
-    function subscribe(newObserver) {
-        observers.push(newObserver);
+    subscribe(newObserver) {
+        this.observers.push(newObserver);
     }
-    function unsubscribe(oldObserver) {
-        observers = observers.filter(obs => obs !== oldObserver);
+
+    unsubscribe(oldObserver) {
+        this.observers = this.observers.filter(obs => obs !== oldObserver);
     }
-    function notify(msg, ...others) {
-        observers.forEach(observer => {
+
+    notify(msg, ...others) {
+        this.observers.forEach(observer => {
             observer.notify(msg, ...others);
         });
     }
-    function collide(snake) {
-        let field = document.getElementById('collDetec');
-        if (square.collision(snake.getHead())) {
-            field.innerHTML = 'true';
-            snake.changeEnergy(energy);
-            snake.addLength();
-            notify('ateApple', this);
+
+    collide(snake) {
+        if (this.square.collision(snake.getHead())) {
+            this.notify('ateApple', this);
         }
-        field.innerHTML = 'false';
     }
-    function getX() {
-        return square.getX();
+
+    getX() {
+        return this.square.getX();
     }
-    function getY() {
-        return square.getY();
+
+    getY() {
+        return this.square.getY();
     }
-    function setX(newX) {
-        square.setX(newX);
+
+    setX(newX) {
+        this.square.setX(newX);
     }
-    function setY(newY) {
-        square.setY(newY);
+
+    setY(newY) {
+        this.square.setY(newY);
     }
-    function draw() {
-        const contex = board.getContext('2d', { alpha: false });
+
+    draw() {
+        const contex = this.board.getContext('2d', { alpha: false });
         contex.fillStyle = 'red';
-        contex.fillRect(square.getX(), square.getY(), square.getSize(), square.getSize());
+        contex.fillRect(this.square.getX(), this.square.getY(),
+            this.square.getSize(), this.square.getSize());
     }
-    return {
-        draw,
-        getX,
-        getY,
-        setX,
-        setY,
-        collide,
-        subscribe,
-        unsubscribe,
-    };
-};
+
+    getSize() {
+        return this.square.getSize();
+    }
+}
 module.exports = Apple;

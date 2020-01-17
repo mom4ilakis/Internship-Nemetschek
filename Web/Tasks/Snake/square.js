@@ -1,47 +1,42 @@
-/* eslint-disable no-var */
-var Square = function (posX, posY, squareSize) {
-    let x = posX;
-    let y = posY;
-    let size = squareSize;
+class Square {
+    constructor(posX, posY, squareSize) {
+        this.x = posX;
+        this.y = posY;
+        this.size = squareSize;
+    }
 
-    function collision(otherSquare) {
-        if (x < otherSquare.getX() + otherSquare.getSize()
-            && x + size > otherSquare.getX()
-            && y < otherSquare.getY() + otherSquare.getSize()
-            && y + size > otherSquare.getY()) {
+    collision(otherSquare) {
+        if (this.x < otherSquare.getX() + otherSquare.getSize()
+            && this.x + this.size > otherSquare.getX()
+            && this.y < otherSquare.getY() + otherSquare.getSize()
+            && this.y + this.size > otherSquare.getY()) {
             return true;
         }
-        
         return false;
     }
 
-    function getX() {
-        return x;
-    }
-    function getY() {
-        return y;
-    }
-    function getSize() {
-        return size;
-    }
-    function setX(newX) {
-        x = newX;
-    }
-    function setY(newY) {
-        y = newY;
-    }
-    function setSize(newSize) {
-        size = newSize;
+    getX() {
+        return this.x;
     }
 
-    return {
-        getSize : getSize,
-        getX : getX,
-        getY : getY,
-        setX : setX,
-        setY : setY,
-        setSize : setSize,
-        collision : collision,
-    };
-};
+    getY() {
+        return this.y;
+    }
+
+    getSize() {
+        return this.size;
+    }
+
+    setX(newX) {
+        this.x = newX;
+    }
+
+    setY(newY) {
+        this.y = newY;
+    }
+
+    setSize(newSize) {
+        this.size = newSize;
+    }
+}
 module.exports = Square;

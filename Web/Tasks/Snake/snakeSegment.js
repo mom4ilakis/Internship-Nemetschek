@@ -1,47 +1,52 @@
-/* eslint-disable no-var */
-//const Square = require('./square');
+// const Square = require('./square');
 
-var SnakeSegment = function(Gboard, x, y, segmentSize = 35) {
-    const square = new Square(x, y, segmentSize);
-    const board = Gboard;
+class SnakeSegment {
+    constructor(Gboard, x, y, segmentSize = 35) {
+        this.square = new Square(x, y, segmentSize);
+        this.board = Gboard;
+    }
 
-    function draw() {
-        const context = board.getContext('2d', { alpha: false });
+    draw() {
+        const context = this.board.getContext('2d', { alpha: false });
+        context.fillStyle = 'yellow';
+
+        context.fillRect(this.square.getX() - 2, this.square.getY() - 2,
+            this.square.getSize() + 4, this.square.getSize() + 4);
+
         context.fillStyle = 'green';
-        context.fillRect(square.getX(), square.getY(), square.getSize(), square.getSize());
+
+        context.fillRect(this.square.getX(), this.square.getY(),
+            this.square.getSize(), this.square.getSize());
     }
-    function getSize() {
-        return square.getSize();
+
+    getSize() {
+        return this.square.getSize();
     }
-    function setSize(newSize) {
+
+    setSize(newSize) {
         if (newSize > 0) {
-            square.setSize(newSize);
+            this.square.setSize(newSize);
         }
     }
-    function getX() {
-        return square.getX();
+
+    getX() {
+        return this.square.getX();
     }
-    function getY() {
-        return square.getY();
+
+    getY() {
+        return this.square.getY();
     }
-    function setX(newX) {
-        square.setX(newX);
+
+    setX(newX) {
+        this.square.setX(newX);
     }
-    function setY(newY) {
-        square.setY(newY);
+
+    setY(newY) {
+        this.square.setY(newY);
     }
-    function collision(segment) {
-        square.collision(segment);
+
+    collision(segment) {
+        return this.square.collision(segment);
     }
-    return {
-        draw,
-        getX,
-        getY,
-        setX,
-        setY,
-        getSize,
-        setSize,
-        collision,
-    };
-};
+}
 module.exports = SnakeSegment;
