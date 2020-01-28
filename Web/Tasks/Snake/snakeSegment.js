@@ -10,43 +10,17 @@ class SnakeSegment {
         const context = this.board.getContext('2d', { alpha: false });
         context.fillStyle = 'yellow';
 
-        context.fillRect(this.square.getX() - 2, this.square.getY() - 2,
-            this.square.getSize() + 4, this.square.getSize() + 4);
+        context.fillRect(this.square.x - 2, this.square.y - 2,
+            this.square.size + 4, this.square.size + 4);
 
         context.fillStyle = 'green';
 
-        context.fillRect(this.square.getX(), this.square.getY(),
-            this.square.getSize(), this.square.getSize());
+        context.fillRect(this.square.x, this.square.y,
+            this.square.size, this.square.size);
     }
 
-    getSize() {
-        return this.square.getSize();
-    }
-
-    setSize(newSize) {
-        if (newSize > 0) {
-            this.square.setSize(newSize);
-        }
-    }
-
-    getX() {
-        return this.square.getX();
-    }
-
-    getY() {
-        return this.square.getY();
-    }
-
-    setX(newX) {
-        this.square.setX(newX);
-    }
-
-    setY(newY) {
-        this.square.setY(newY);
-    }
-
-    collision(segment) {
-        return this.square.collision(segment);
+    collides(segment) {
+        return this.square.collides(segment);
     }
 }
 module.exports = SnakeSegment;

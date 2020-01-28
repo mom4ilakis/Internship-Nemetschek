@@ -5,38 +5,14 @@ class Square {
         this.size = squareSize;
     }
 
-    collision(otherSquare) {
-        if (this.x < otherSquare.getX() + otherSquare.getSize()
-            && this.x + this.size > otherSquare.getX()
-            && this.y < otherSquare.getY() + otherSquare.getSize()
-            && this.y + this.size > otherSquare.getY()) {
+    collides(otherSquare) {
+        if (this.x < otherSquare.x + otherSquare.size
+            && this.x + this.size > otherSquare.x
+            && this.y < otherSquare.y + otherSquare.size
+            && this.y + this.size > otherSquare.y) {
             return true;
         }
         return false;
-    }
-
-    getX() {
-        return this.x;
-    }
-
-    getY() {
-        return this.y;
-    }
-
-    getSize() {
-        return this.size;
-    }
-
-    setX(newX) {
-        this.x = newX;
-    }
-
-    setY(newY) {
-        this.y = newY;
-    }
-
-    setSize(newSize) {
-        this.size = newSize;
     }
 }
 module.exports = Square;
