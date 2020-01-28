@@ -1,1 +1,1 @@
-const gb = new GameBoard(document.getElementById('gameField'));
+const game = new Game();
