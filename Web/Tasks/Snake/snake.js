@@ -1,7 +1,7 @@
 // const SnakeSegment = require('./snakeSegment');
 
 const direction = {
-    none: 0,
+    default: 0,
     up: 1,
     right: 2,
     down: 3,
@@ -15,8 +15,9 @@ class Snake {
         this.observers = [];
         this.body = [new SnakeSegment(this.board, x, y, this.size)];
         this.head = this.body[0];
+        this.speed = snakeSize;
         this.ate = false;
-        this.currentDirection = direction.none;
+        this.currentDirection = direction.default;
         this.eatsTail = this.eatsTail.bind(this);
         this.coordinates = document.getElementById('snkCoor');
     }
@@ -28,7 +29,7 @@ class Snake {
     }
 
     draw() {
-        this.coordinates.innerHTML = `X ${this.head.getX()}\nY:${this.head.getY()}`;
+        this.coordinates.innerHTML = `X ${this.head.square.x}\nY:${this.head.square.y}`;
         this.body.forEach((segment => {
             segment.draw();
         }));
@@ -39,14 +40,14 @@ class Snake {
     }
 
     eatsTail() {
-        if (this.body.some(segment => this.head !== segment && this.head.collision(segment))) {
+        if (this.body.some(segment => this.head !== segment && this.head.square.collides(segment.square))) {
             this.notify('death');
         }
     }
 
     reachedBorder() {
-        if (this.head.getX() <= 30 || this.head.getX() >= this.board.width - 30
-            || this.head.getY() <= 30 || this.head.getY() >= this.board.height - 30) {
+        if (this.head.square.x <= 30 || this.head.square.x >= this.board.width - 30
+            || this.head.square.y <= 30 || this.head.square.y >= this.board.height - 30) {
             this.notify('death');
         }
     }
@@ -55,31 +56,43 @@ class Snake {
         let newHead = null;
         switch (this.currentDirection) {
         case direction.up:
-            newHead = new SnakeSegment(this.board, this.head.getX(),
-                this.head.getY() - this.size, this.head.getSize());
+            newHead = new SnakeSegment(this.board,
+                this.head.square.x,
+                this.head.square.y - this.speed,
+                this.head.square.size);
             break;
         case direction.down:
-            newHead = new SnakeSegment(this.board, this.head.getX(),
-                this.head.getY() + this.size, this.head.getSize());
+            newHead = new SnakeSegment(this.board,
+                this.head.square.x,
+                this.head.square.y + this.speed,
+                this.head.square.size);
             break;
         case direction.left:
-            newHead = new SnakeSegment(this.board, this.head.getX() - this.size,
-                this.head.getY(), this.head.getSize());
+            newHead = new SnakeSegment(this.board,
+                this.head.square.x - this.speed,
+                this.head.square.y,
+                this.head.square.size);
             break;
         case direction.right:
-            newHead = new SnakeSegment(this.board, this.head.getX() + this.size,
-                this.head.getY(), this.head.getSize());
+            newHead = new SnakeSegment(
+                this.board, this.head.square.x + this.speed,
+                this.head.square.y,
+                this.head.square.size,
+            );
             break;
         default:
+            newHead = this.head;
             break;
         }
         this.body.unshift(newHead);
+        this.head = this.body[0];
         if (this.ate) {
             this.ate = false;
             this.length++;
         } else {
             this.body.pop();
         }
+        this.notify('moved');
         this.eatsTail();
         this.reachedBorder();
     }
@@ -87,132 +100,37 @@ class Snake {
     moveUp() {
         if (this.currentDirection !== direction.down) {
             this.currentDirection = direction.up;
-            // const newHead = new SnakeSegment(this.board, this.head.getX(),
-            //     this.head.getY() - this.size, this.head.getSize());
-
-            // this.body.unshift(newHead);
-            // this.head = this.body[0];
-
-            // if (this.ate) {
-            //     this.ate = false;
-            //     this.length++;
-            // } else {
-            //     this.body.pop();
-            // }
-
-            // this.eatsTail();
-
-            // this.reachedBorder();
+            this.notify('moved');
         }
     }
 
     moveDown() {
         if (this.currentDirection !== direction.up) {
             this.currentDirection = direction.down;
+            this.notify('moved');
         }
-
-        //     const newHead = new SnakeSegment(this.board, this.head.getX(),
-        //         this.head.getY() + this.size, this.head.getSize());
-        //     this.body.unshift(newHead);
-
-        //     this.head = this.body[0];
-
-        //     if (this.ate) {
-        //         this.ate = false;
-        //         this.length++;
-        //     } else {
-        //         this.body.pop();
-        //     }
-
-        //     this.eatsTail();
-        //     this.reachedBorder();
-        // }
     }
 
     moveLeft() {
         if (this.currentDirection !== direction.right) {
             this.currentDirection = direction.left;
+            this.notify('moved');
         }
-        //     const newHead = new SnakeSegment(this.board, this.head.getX() - this.size,
-        //         this.head.getY(), this.head.getSize());
-        //     this.body.unshift(newHead);
-        //     this.head = this.body[0];
-        //     if (this.ate) {
-        //         this.ate = false;
-        //         this.length++;
-        //     } else {
-        //         this.body.pop();
-        //     }
-        //     this.eatsTail();
-        //     this.reachedBorder();
-        // }
     }
 
     moveRight() {
         if (this.currentDirection !== direction.left) {
             this.currentDirection = direction.right;
+            this.notify('moved');
         }
-        //     const newHead = new SnakeSegment(this.board, this.head.getX() + this.size,
-        //         this.head.getY(), this.head.getSize());
-        //     this.body.unshift(newHead);
-
-        //     this.head = this.body[0];
-
-        //     if (this.ate) {
-        //         this.ate = false;
-        //         this.length++;
-        //     } else {
-        //         this.body.pop();
-        //     }
-        //     this.eatsTail();
-        //     this.reachedBorder();
-        // }
     }
 
     getEnergy() {
         return this.energy;
     }
 
-    changeEnergy(delta) {
-        // energy += (delta / 100);
-
-        if (this.energy <= 0) {
-            this.energy = 1;
-        }
-    }
-
-    getLength() {
-        return this.length;
-    }
-
-    continueMoving() {
-        switch (this.currentDirection) {
-        case direction.up:
-            this.moveUp();
-            this.notify('moved');
-            break;
-        case direction.down:
-            this.moveDown();
-            this.notify('moved');
-            break;
-        case direction.left:
-            this.moveLeft();
-            this.notify('moved');
-            break;
-        case direction.right:
-            this.moveRight();
-            this.notify('moved');
-            break;
-        default:
-        }
-    }
-
     getHead() {
         return this.head;
-    }
-
-    getBody() {
-        return this.body;
     }
 
     subscribe(newObserver) {
