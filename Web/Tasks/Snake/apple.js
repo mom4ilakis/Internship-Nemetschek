@@ -22,36 +22,16 @@ class Apple {
     }
 
     collide(snake) {
-        if (this.square.collision(snake.getHead())) {
+        if (this.square.collides(snake.getHead().square)) {
             this.notify('ateApple', this);
         }
-    }
-
-    getX() {
-        return this.square.getX();
-    }
-
-    getY() {
-        return this.square.getY();
-    }
-
-    setX(newX) {
-        this.square.setX(newX);
-    }
-
-    setY(newY) {
-        this.square.setY(newY);
     }
 
     draw() {
         const contex = this.board.getContext('2d', { alpha: false });
         contex.fillStyle = 'red';
-        contex.fillRect(this.square.getX(), this.square.getY(),
-            this.square.getSize(), this.square.getSize());
-    }
-
-    getSize() {
-        return this.square.getSize();
+        contex.fillRect(this.square.x, this.square.y,
+            this.square.size, this.square.size);
     }
 }
 module.exports = Apple;
