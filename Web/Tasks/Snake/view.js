@@ -1,6 +1,6 @@
 // const Snake = require('./snake');
 
-class GameBoard {
+class Board {
     constructor(target) {
         this.objSize = 30;
         this.canvas = target;
@@ -8,35 +8,20 @@ class GameBoard {
         this.draw = this.draw.bind(this);
         this.apple = null;
         this.snake = new Snake(target, 144, 144, this.objSize);
-        this.gameOn = false;
-        this.addMovementHandling = this.addMovementHandling.bind(this);
         this.handleMovement = this.handleMovement.bind(this);
         this.placeNewApple = this.placeNewApple.bind(this);
         this.snake.subscribe(this);
-        this.startGame = this.startGame.bind(this);
-        this.loadBtn.addEventListener('click', this.startGame);
-        this.gameLoop = this.gameLoop.bind(this);
-        this.update = this.update.bind(this);
+        this.updateBoardObjects = this.updateBoardObjects.bind(this);
+        this.placeNewApple();
     }
 
-    update() {
-        this.snake.move();
-    }
-
-    gameLoop() {
+    updateBoardObjects() {
         this.draw();
-        window.requestAnimationFrame(this.update);
+        this.snake.move();
     }
 
     clearCanvas() {
         this.canvas.width = this.canvas.width;
-    }
-
-    startGame() {
-        this.addMovementHandling();
-        this.placeNewApple();
-        this.gameOn = true;
-        this.gameLoop();
     }
 
     notify(msg, ...others) {
@@ -60,10 +45,6 @@ class GameBoard {
         }
     }
 
-    addMovementHandling() {
-        window.addEventListener('keydown', this.handleMovement);
-    }
-
     handleMovement(event) {
         switch (event.keyCode) {
         case 37:
@@ -84,13 +65,13 @@ class GameBoard {
     }
 
     placeNewApple() {
-        const x = Math.random() * (this.canvas.width - 2 * this.objSize) + 2 * this.objSize;
-        const y = Math.random() * (this.canvas.height - 2 * this.objSize) + 2 * this.objSize;
+        const x = Math.random() * (this.canvas.width - 2 * this.objSize) + this.objSize;
+        const y = Math.random() * (this.canvas.height - 2 * this.objSize) + this.objSize;
         const energy = Math.random() * 100;
         const apple = new Apple(this.canvas, energy, x, y, this.objSize);
 
-        this.snake.getBody().forEach(segment => {
-            if (segment.collision(apple)) {
+        this.snake.body.forEach(segment => {
+            if (segment.collides(apple)) {
                 this.placeNewApple();
             }
         });
