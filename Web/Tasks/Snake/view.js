@@ -1,13 +1,15 @@
 // const Snake = require('./snake');
 
 class Board {
-    constructor(target) {
+    constructor(target, game) {
+        this.game = game;
         this.objSize = 30;
         this.canvas = target;
         this.loadBtn = document.getElementById('loadBtn');
         this.draw = this.draw.bind(this);
         this.apple = null;
-        this.snake = new Snake(target, 144, 144, this.objSize);
+        this.snakeHasMoved = true;
+        this.snake = new Snake(target, 120, 120, this.objSize);
         this.handleMovement = this.handleMovement.bind(this);
         this.placeNewApple = this.placeNewApple.bind(this);
         this.snake.subscribe(this);
@@ -30,15 +32,17 @@ class Board {
             delete this.snake;
             delete this.apple;
             this.clearCanvas();
-            this.gameOn = false;
+            this.game.onDeath();
             break;
         case 'ateApple':
             this.snake.eat();
             this.placeNewApple();
+            this.game.speedUp();
             this.draw();
             break;
         case 'moved':
             this.apple.collide(this.snake);
+            this.snakeHasMoved = true;
             this.draw();
             break;
         default:
@@ -48,16 +52,28 @@ class Board {
     handleMovement(event) {
         switch (event.keyCode) {
         case 37:
-            this.snake.moveLeft();
+            if (this.snakeHasMoved) {
+                this.snake.moveLeft();
+                this.snakeHasMoved = false;
+            }
             break;// left
         case 38:
-            this.snake.moveUp();
+            if (this.snakeHasMoved) {
+                this.snake.moveUp();
+                this.snakeHasMoved = false;
+            }
             break;// up
         case 39:
-            this.snake.moveRight();
+            if (this.snakeHasMoved) {
+                this.snake.moveRight();
+                this.snakeHasMoved = false;
+            }
             break;// right
         case 40:
-            this.snake.moveDown();
+            if (this.snakeHasMoved) {
+                this.snake.moveDown();
+                this.snakeHasMoved = false;
+            }
             break;// down
         default:
             break;
@@ -65,8 +81,8 @@ class Board {
     }
 
     placeNewApple() {
-        const x = Math.random() * (this.canvas.width - 2 * this.objSize) + this.objSize;
-        const y = Math.random() * (this.canvas.height - 2 * this.objSize) + this.objSize;
+        const x = this.objSize * (Math.floor(Math.random() * 22) + 1);
+        const y = this.objSize * (Math.floor(Math.random() * 22) + 1);
         const energy = Math.random() * 100;
         const apple = new Apple(this.canvas, energy, x, y, this.objSize);
 
