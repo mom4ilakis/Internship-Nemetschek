@@ -40,14 +40,17 @@ class Snake {
     }
 
     eatsTail() {
-        if (this.body.some(segment => this.head !== segment && this.head.square.collides(segment.square))) {
+        if (this.body.some(segment => this.head !== segment
+            && this.head.square.collides(segment.square))) {
             this.notify('death');
         }
     }
 
     reachedBorder() {
-        if (this.head.square.x <= 30 || this.head.square.x >= this.board.width - 30
-            || this.head.square.y <= 30 || this.head.square.y >= this.board.height - 30) {
+        if (this.head.square.x < this.size
+            || this.head.square.x >= this.board.width - this.size
+            || this.head.square.y < this.size
+            || this.head.square.y >= this.board.height - this.size) {
             this.notify('death');
         }
     }
@@ -100,28 +103,24 @@ class Snake {
     moveUp() {
         if (this.currentDirection !== direction.down) {
             this.currentDirection = direction.up;
-            this.notify('moved');
         }
     }
 
     moveDown() {
         if (this.currentDirection !== direction.up) {
             this.currentDirection = direction.down;
-            this.notify('moved');
         }
     }
 
     moveLeft() {
         if (this.currentDirection !== direction.right) {
             this.currentDirection = direction.left;
-            this.notify('moved');
         }
     }
 
     moveRight() {
         if (this.currentDirection !== direction.left) {
             this.currentDirection = direction.right;
-            this.notify('moved');
         }
     }
 
