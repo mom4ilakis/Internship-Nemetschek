@@ -46,6 +46,7 @@ class Game {
 
     setSnakeDirection(event) {
         this.board.handleMovement(event);
+        this.updateBoardObjects();
     }
 
     unpause() {
