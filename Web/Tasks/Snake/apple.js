@@ -1,7 +1,15 @@
 // const Square = require('./this.square');
 
+function toHex(num) {
+    let hex = Number(num).toString(16);
+    if (hex.length < 2) {
+        hex = `0${hex}`;
+    }
+    return hex;
+}
+
 class Apple {
-    constructor(gameBoard, appleEnergy, x, y, appleSize = 20) {
+    constructor(gameBoard, x, y, appleSize = 20) {
         this.board = gameBoard;
         this.square = new Square(x, y, appleSize);
         this.observers = [];
@@ -27,9 +35,21 @@ class Apple {
         }
     }
 
+
+    calculateColor() {
+        let greenCol = Math.floor(this.energy * 255);
+        greenCol = greenCol < 127 ? greenCol : 0;
+
+        const red = 'ff';
+        const green = toHex(greenCol);
+        const blue = '00';
+
+        return `#${red}${green}${blue}`;
+    }
+
     draw() {
         const contex = this.board.getContext('2d', { alpha: false });
-        contex.fillStyle = 'red';
+        contex.fillStyle = this.calculateColor();
         contex.fillRect(this.square.x, this.square.y,
             this.square.size, this.square.size);
     }
