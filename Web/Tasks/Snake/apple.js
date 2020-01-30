@@ -36,8 +36,8 @@ class Apple {
     }
 
 
-    calculateColor() {
-        let greenCol = Math.floor(this.energy * 255);
+    static calculateColor() {
+        let greenCol = Math.floor(Math.random() * 255);
         greenCol = greenCol < 127 ? greenCol : 0;
 
         const red = 'ff';
