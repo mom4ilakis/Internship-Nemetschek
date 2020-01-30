@@ -9,16 +9,19 @@ class Board {
         this.draw = this.draw.bind(this);
         this.apple = null;
         this.snakeHasMoved = true;
-        this.snake = new Snake(target, 120, 120, this.objSize);
         this.handleMovement = this.handleMovement.bind(this);
         this.placeNewApple = this.placeNewApple.bind(this);
-        this.snake.subscribe(this);
         this.updateBoardObjects = this.updateBoardObjects.bind(this);
+        this.spawnSnake();
         this.placeNewApple();
     }
 
+    spawnSnake() {
+        this.snake = new Snake(this.canvas, 120, 120, this.objSize);
+        this.snake.subscribe(this);
+    }
+
     updateBoardObjects() {
-        this.draw();
         this.snake.move();
     }
 
@@ -29,20 +32,17 @@ class Board {
     notify(msg, ...others) {
         switch (msg) {
         case 'death':
-            delete this.snake;
-            delete this.apple;
             this.clearCanvas();
             this.game.onDeath();
             break;
         case 'ateApple':
             this.snake.eat();
-            this.placeNewApple();
             this.game.speedUp();
+            this.placeNewApple();
             this.draw();
             break;
         case 'moved':
             this.apple.collide(this.snake);
-            this.snakeHasMoved = true;
             this.draw();
             break;
         default:
@@ -52,28 +52,16 @@ class Board {
     handleMovement(event) {
         switch (event.keyCode) {
         case 37:
-            if (this.snakeHasMoved) {
-                this.snake.moveLeft();
-                this.snakeHasMoved = false;
-            }
+            this.snake.moveLeft();
             break;// left
         case 38:
-            if (this.snakeHasMoved) {
-                this.snake.moveUp();
-                this.snakeHasMoved = false;
-            }
+            this.snake.moveUp();
             break;// up
         case 39:
-            if (this.snakeHasMoved) {
-                this.snake.moveRight();
-                this.snakeHasMoved = false;
-            }
+            this.snake.moveRight();
             break;// right
         case 40:
-            if (this.snakeHasMoved) {
-                this.snake.moveDown();
-                this.snakeHasMoved = false;
-            }
+            this.snake.moveDown();
             break;// down
         default:
             break;
@@ -81,16 +69,15 @@ class Board {
     }
 
     placeNewApple() {
-        const x = this.objSize * (Math.floor(Math.random() * 22) + 1);
-        const y = this.objSize * (Math.floor(Math.random() * 22) + 1);
-        const energy = Math.random() * 100;
-        const apple = new Apple(this.canvas, energy, x, y, this.objSize);
+        let x = this.objSize * (Math.floor(Math.random() * 22) + 1);
+        let y = this.objSize * (Math.floor(Math.random() * 22) + 1);
+        let apple = new Apple(this.canvas, x, y, this.objSize);
 
-        this.snake.body.forEach(segment => {
-            if (segment.collides(apple)) {
-                this.placeNewApple();
-            }
-        });
+        while (this.snake.body.some((segment => segment.collides(apple.square)))) {
+            x = this.objSize * (Math.floor(Math.random() * 22) + 1);
+            y = this.objSize * (Math.floor(Math.random() * 22) + 1);
+            apple = new Apple(this.canvas, x, y, this.objSize);
+        }
         apple.subscribe(this);
         this.apple = apple;
     }
