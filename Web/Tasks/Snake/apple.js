@@ -7,12 +7,24 @@ function toHex(num) {
     }
     return hex;
 }
+function calculateColor() {
+    let greenCol = Math.floor(Math.random() * 255);
+    greenCol = greenCol < 127 ? greenCol : 0;
+
+    const red = 'ff';
+    const green = toHex(greenCol);
+    const blue = '00';
+
+    return `#${red}${green}${blue}`;
+}
+
 
 class Apple {
     constructor(gameBoard, x, y, appleSize = 20) {
         this.board = gameBoard;
         this.square = new Square(x, y, appleSize);
         this.observers = [];
+        this.colour = calculateColor();
     }
 
     subscribe(newObserver) {
@@ -35,21 +47,9 @@ class Apple {
         }
     }
 
-
-    static calculateColor() {
-        let greenCol = Math.floor(Math.random() * 255);
-        greenCol = greenCol < 127 ? greenCol : 0;
-
-        const red = 'ff';
-        const green = toHex(greenCol);
-        const blue = '00';
-
-        return `#${red}${green}${blue}`;
-    }
-
     draw() {
         const contex = this.board.getContext('2d', { alpha: false });
-        contex.fillStyle = this.calculateColor();
+        contex.fillStyle = this.colour;
         contex.fillRect(this.square.x, this.square.y,
             this.square.size, this.square.size);
     }
