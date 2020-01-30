@@ -7,19 +7,20 @@ const direction = {
     down: 3,
     left: 4,
 };
+
 class Snake {
     constructor(gameBoard, x, y, snakeSize) {
         this.length = 1;
         this.board = gameBoard;
         this.size = snakeSize;
         this.observers = [];
+        this.snakeHasMoved = true;
         this.body = [new SnakeSegment(this.board, x, y, this.size)];
         this.head = this.body[0];
         this.speed = snakeSize;
         this.ate = false;
         this.currentDirection = direction.default;
         this.eatsTail = this.eatsTail.bind(this);
-        this.coordinates = document.getElementById('snkCoor');
     }
 
     notify(msg) {
@@ -29,7 +30,6 @@ class Snake {
     }
 
     draw() {
-        this.coordinates.innerHTML = `X ${this.head.square.x}\nY:${this.head.square.y}`;
         this.body.forEach((segment => {
             segment.draw();
         }));
@@ -87,6 +87,7 @@ class Snake {
             newHead = this.head;
             break;
         }
+        this.snakeHasMoved = true;
         this.body.unshift(newHead);
         this.head = this.body[0];
         if (this.ate) {
@@ -101,26 +102,32 @@ class Snake {
     }
 
     moveUp() {
-        if (this.currentDirection !== direction.down) {
+        if (this.currentDirection !== direction.down && this.snakeHasMoved) {
             this.currentDirection = direction.up;
+            this.snakeHasMoved = false;
         }
     }
 
     moveDown() {
-        if (this.currentDirection !== direction.up) {
+        if (this.currentDirection !== direction.up && this.snakeHasMoved) {
             this.currentDirection = direction.down;
+            this.snakeHasMoved = false;
+
         }
     }
 
     moveLeft() {
-        if (this.currentDirection !== direction.right) {
+        if (this.currentDirection !== direction.right && this.snakeHasMoved) {
             this.currentDirection = direction.left;
+            this.snakeHasMoved = false;
+
         }
     }
 
     moveRight() {
-        if (this.currentDirection !== direction.left) {
+        if (this.currentDirection !== direction.left && this.snakeHasMoved) {
             this.currentDirection = direction.right;
+            this.snakeHasMoved = false;
         }
     }
 
