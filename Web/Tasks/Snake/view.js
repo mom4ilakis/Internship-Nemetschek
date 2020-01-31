@@ -1,5 +1,8 @@
 // const Snake = require('./snake');
 
+const boardLength = 22;
+const startingX = 120;
+const startingY = 120;
 class Board {
     constructor(target, game) {
         this.game = game;
@@ -17,7 +20,7 @@ class Board {
     }
 
     spawnSnake() {
-        this.snake = new Snake(this.canvas, 120, 120, this.objSize);
+        this.snake = new Snake(this.canvas, startingX, startingY, this.objSize);
         this.snake.subscribe(this);
     }
 
@@ -38,6 +41,9 @@ class Board {
         case 'ateApple':
             this.snake.eat();
             this.game.speedUp();
+            if (this.snake.lenght === boardLength * boardLength) {
+                this.game.onWin();
+            }
             this.placeNewApple();
             this.draw();
             break;
@@ -69,13 +75,13 @@ class Board {
     }
 
     placeNewApple() {
-        let x = this.objSize * (Math.floor(Math.random() * 22) + 1);
-        let y = this.objSize * (Math.floor(Math.random() * 22) + 1);
+        let x = this.objSize * (Math.floor(Math.random() * boardLength) + 1);
+        let y = this.objSize * (Math.floor(Math.random() * boardLength) + 1);
         let apple = new Apple(this.canvas, x, y, this.objSize);
 
         while (this.snake.body.some((segment => segment.collides(apple.square)))) {
-            x = this.objSize * (Math.floor(Math.random() * 22) + 1);
-            y = this.objSize * (Math.floor(Math.random() * 22) + 1);
+            x = this.objSize * (Math.floor(Math.random() * boardLength) + 1);
+            y = this.objSize * (Math.floor(Math.random() * boardLength) + 1);
             apple = new Apple(this.canvas, x, y, this.objSize);
         }
         apple.subscribe(this);
@@ -87,7 +93,9 @@ class Board {
         const cntx = this.canvas.getContext('2d');
         cntx.fillStyle = 'purple';
         cntx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        cntx.clearRect(30, 30, this.canvas.width - 60, this.canvas.height - 60);
+        cntx.clearRect(this.objSize, this.objSize,
+            this.canvas.width - 2 * this.objSize,
+            this.canvas.height - 2 * this.objSize);
         this.snake.draw();
         this.apple.draw();
     }
