@@ -64,6 +64,10 @@ class Game {
 
     pause() {
         this.paused = true;
+        const contex = this.canvas.getContext('2d');
+        contex.fillStyle = 'white';
+        contex.font = '45px Arial';
+        contex.fillText('Paused, press space to continue', 30, this.canvas.height / 2);
         this.createContinueButton();
     }
 
