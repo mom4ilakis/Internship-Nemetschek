@@ -5,11 +5,11 @@ const direction = {
     up: 1,
     right: 2,
     down: 3,
-    left: 4,
+    left: 4
 };
 
 class Snake {
-    constructor(gameBoard, x, y, snakeSize) {
+    constructor (gameBoard, x, y, snakeSize) {
         this.length = 1;
         this.board = gameBoard;
         this.size = snakeSize;
@@ -23,39 +23,39 @@ class Snake {
         this.eatsTail = this.eatsTail.bind(this);
     }
 
-    notify(msg) {
+    notify (msg) {
         this.observers.forEach(observer => {
             observer.notify(msg);
         });
     }
 
-    draw() {
-        this.body.forEach((segment => {
+    draw () {
+        this.body.forEach(segment => {
             segment.draw();
-        }));
+        });
     }
 
-    eat() {
+    eat () {
         this.ate = true;
     }
 
-    eatsTail() {
-        if (this.body.some(segment => this.head !== segment
-            && this.head.square.collides(segment.square))) {
+    eatsTail () {
+        if (this.body.some(segment => this.head !== segment &&
+            this.head.square.collides(segment.square))) {
             this.notify('death');
         }
     }
 
-    reachedBorder() {
-        if (this.head.square.x < this.size
-            || this.head.square.x >= this.board.width - this.size
-            || this.head.square.y < this.size
-            || this.head.square.y >= this.board.height - this.size) {
+    reachedBorder () {
+        if (this.head.square.x < this.size ||
+            this.head.square.x >= this.board.width - this.size ||
+            this.head.square.y < this.size ||
+            this.head.square.y >= this.board.height - this.size) {
             this.notify('death');
         }
     }
 
-    move() {
+    move () {
         let newHead = null;
         switch (this.currentDirection) {
         case direction.up:
@@ -80,7 +80,7 @@ class Snake {
             newHead = new SnakeSegment(
                 this.board, this.head.square.x + this.speed,
                 this.head.square.y,
-                this.head.square.size,
+                this.head.square.size
             );
             break;
         default:
@@ -101,49 +101,47 @@ class Snake {
         this.reachedBorder();
     }
 
-    moveUp() {
+    moveUp () {
         if (this.currentDirection !== direction.down && this.snakeHasMoved) {
             this.currentDirection = direction.up;
             this.snakeHasMoved = false;
         }
     }
 
-    moveDown() {
+    moveDown () {
         if (this.currentDirection !== direction.up && this.snakeHasMoved) {
             this.currentDirection = direction.down;
             this.snakeHasMoved = false;
-
         }
     }
 
-    moveLeft() {
+    moveLeft () {
         if (this.currentDirection !== direction.right && this.snakeHasMoved) {
             this.currentDirection = direction.left;
             this.snakeHasMoved = false;
-
         }
     }
 
-    moveRight() {
+    moveRight () {
         if (this.currentDirection !== direction.left && this.snakeHasMoved) {
             this.currentDirection = direction.right;
             this.snakeHasMoved = false;
         }
     }
 
-    getEnergy() {
+    getEnergy () {
         return this.energy;
     }
 
-    getHead() {
+    getHead () {
         return this.head;
     }
 
-    subscribe(newObserver) {
+    subscribe (newObserver) {
         this.observers.push(newObserver);
     }
 
-    unsubscribe(oldObserver) {
+    unsubscribe (oldObserver) {
         this.observers = this.observers.filter(obs => obs !== oldObserver);
     }
 }

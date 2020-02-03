@@ -1,12 +1,12 @@
 // const Square = require('./square');
 
 class SnakeSegment {
-    constructor(Gboard, x, y, segmentSize = 35) {
+    constructor (Gboard, x, y, segmentSize = 35) {
         this.square = new Square(x, y, segmentSize);
         this.board = Gboard;
     }
 
-    draw() {
+    draw () {
         const context = this.board.getContext('2d', { alpha: false });
         context.fillStyle = 'yellow';
 
@@ -19,7 +19,7 @@ class SnakeSegment {
             this.square.size, this.square.size);
     }
 
-    collides(segment) {
+    collides (segment) {
         return this.square.collides(segment);
     }
 }

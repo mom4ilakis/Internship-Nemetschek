@@ -3,8 +3,9 @@
 const boardLength = 22;
 const startingX = 120;
 const startingY = 120;
+
 class Board {
-    constructor(target, game) {
+    constructor (target, game) {
         this.game = game;
         this.objSize = 30;
         this.canvas = target;
@@ -19,20 +20,20 @@ class Board {
         this.placeNewApple();
     }
 
-    spawnSnake() {
+    spawnSnake () {
         this.snake = new Snake(this.canvas, startingX, startingY, this.objSize);
         this.snake.subscribe(this);
     }
 
-    updateBoardObjects() {
+    updateBoardObjects () {
         this.snake.move();
     }
 
-    clearCanvas() {
+    clearCanvas () {
         this.canvas.width = this.canvas.width;
     }
 
-    notify(msg, ...others) {
+    notify (msg, ...others) {
         switch (msg) {
         case 'death':
             this.clearCanvas();
@@ -55,7 +56,7 @@ class Board {
         }
     }
 
-    handleMovement(event) {
+    handleMovement (event) {
         switch (event.keyCode) {
         case 37:
             this.snake.moveLeft();
@@ -74,12 +75,12 @@ class Board {
         }
     }
 
-    placeNewApple() {
+    placeNewApple () {
         let x = this.objSize * (Math.floor(Math.random() * boardLength) + 1);
         let y = this.objSize * (Math.floor(Math.random() * boardLength) + 1);
         let apple = new Apple(this.canvas, x, y, this.objSize);
 
-        while (this.snake.body.some((segment => segment.collides(apple.square)))) {
+        while (this.snake.body.some(segment => segment.collides(apple.square))) {
             x = this.objSize * (Math.floor(Math.random() * boardLength) + 1);
             y = this.objSize * (Math.floor(Math.random() * boardLength) + 1);
             apple = new Apple(this.canvas, x, y, this.objSize);
@@ -88,7 +89,7 @@ class Board {
         this.apple = apple;
     }
 
-    draw() {
+    draw () {
         this.clearCanvas();
         const cntx = this.canvas.getContext('2d');
         cntx.fillStyle = 'purple';

@@ -1,7 +1,7 @@
 const baseScore = 25;
 
 class Game {
-    constructor() {
+    constructor () {
         this.canvas = document.getElementById('gameField');
         this.board = new Board(this.canvas, this);
         this.paused = false;
@@ -20,11 +20,11 @@ class Game {
         window.addEventListener('keydown', this.keyInput);
     }
 
-    draw() {
+    draw () {
         this.board.draw();
     }
 
-    keyInput(event) {
+    keyInput (event) {
         switch (event.keyCode) {
         case 32:// Space
             if (this.paused) {
@@ -44,17 +44,17 @@ class Game {
         }
     }
 
-    setSnakeDirection(event) {
+    setSnakeDirection (event) {
         this.board.handleMovement(event);
         this.updateBoardObjects();
     }
 
-    unpause() {
+    unpause () {
         this.paused = false;
         document.getElementById('contBtn').removeEventListener('click', this.unpause);
     }
 
-    createContinueButton() {
+    createContinueButton () {
         const contBtn = document.getElementById('contBtn') || document.createElement('button');
         contBtn.setAttribute('id', 'contBtn');
         contBtn.innerHTML = 'Continue';
@@ -62,7 +62,7 @@ class Game {
         document.getElementById('area').append(contBtn);
     }
 
-    pause() {
+    pause () {
         this.paused = true;
         const contex = this.canvas.getContext('2d');
         contex.fillStyle = 'white';
@@ -71,7 +71,7 @@ class Game {
         this.createContinueButton();
     }
 
-    restart() {
+    restart () {
         this.board.spawnSnake();
         this.board.placeNewApple();
         this.board.clearCanvas();
@@ -81,7 +81,7 @@ class Game {
         window.addEventListener('keydown', this.keyInput);
     }
 
-    createRestartButton() {
+    createRestartButton () {
         const restartBtn = document.getElementById('restartBtn') || document.createElement('button');
         restartBtn.setAttribute('id', 'restartBtn');
         restartBtn.addEventListener('click', this.restart);
@@ -89,7 +89,7 @@ class Game {
         document.getElementById('area').append(restartBtn);
     }
 
-    onWin() {
+    onWin () {
         this.paused = true;
         this.board.clearCanvas();
         const context = this.canvas.getContext('2d');
@@ -99,7 +99,7 @@ class Game {
         this.createRestartButton();
     }
 
-    onDeath() {
+    onDeath () {
         this.board.clearCanvas();
         const text = `You died! Score: ${this.score}`;
         const context = this.canvas.getContext('2d');
@@ -110,11 +110,11 @@ class Game {
         this.createRestartButton();
     }
 
-    speedUp() {
+    speedUp () {
         this.framesToSkip *= 0.96;
     }
 
-    start() {
+    start () {
         const pauseBnt = document.getElementById('pauseBtn') || document.createElement('button');
         pauseBnt.setAttribute('id', 'pauseBtn');
         pauseBnt.addEventListener('click', this.pause);
@@ -125,7 +125,7 @@ class Game {
         this.gameLoop();
     }
 
-    gameLoop() {
+    gameLoop () {
         if (!this.paused) {
             this.draw();
             if (this.framesCount >= this.framesToSkip) {
