@@ -7,7 +7,7 @@ class QuickInfo extends React.Component {
             <div>
                 <p>Condition: {this.props.data.condition}</p>
                 <p>{this.props.data.description}</p>
-                <p>Cloud cover is { this.props.data.clouds} %</p>
+                <p>Cloud cover is { this.props.data.clouds || 0} %</p>
             </div>
         );
     }
