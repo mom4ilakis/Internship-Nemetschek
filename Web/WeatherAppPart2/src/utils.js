@@ -1,5 +1,6 @@
 const formatData = (response) => {
     const data = {};
+    data.location = response.data.name;
     // temperature info
     data.minTemp = response.data.main.temp_min || null;
     data.maxTemp = response.data.main.temp_max || null;

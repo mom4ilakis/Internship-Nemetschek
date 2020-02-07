@@ -20,8 +20,11 @@ class WindInfo extends React.Component {
     render () {
         return (
             <div>
-                <p>Wind speed is: {this.props.data.wind.speed}</p>
-                <p>Wind direction is {this.calculateCardinalDirection(this.props.data.wind.direction)}</p>
+                {this.props.data.wind.speed &&
+                <div> Wind speed is: {this.props.data.wind.speed} m/s <br/></div>}
+                {this.props.data.wind.direction &&
+                <div>Wind direction is {this.calculateCardinalDirection(this.props.data.wind.direction)}</div>}
+                <hr/>
             </div>
         );
     }

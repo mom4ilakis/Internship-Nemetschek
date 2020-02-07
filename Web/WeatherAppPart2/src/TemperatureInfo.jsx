@@ -7,22 +7,20 @@ class TemperatureInfo extends React.Component {
         this.state = { unit: 'C' };
     }
 
-    kelvinToCelsius = (tempKelvin) => {
+    kelvinToCelsius = tempKelvin => {
         return Math.floor(tempKelvin - 273.15);
     }
 
-    kelvinToFahrenheit = (tempKelvin) => {
+    kelvinToFahrenheit = tempKelvin => {
         return Math.floor((tempKelvin - 273.15) * 1.8 + 32);
     }
 
-    handleChangeUnit = (event) => {
+    handleChangeUnit = event => {
         const newUnit = this.state.unit === 'C' ? 'F' : 'C';
         this.setState({ unit: newUnit });
-        console.log(this.state.unit);
-        event.value = this.state.unit;
     }
 
-    unitConversion = (measurement) => {
+    unitConversion = measurement => {
         if (this.state.unit === 'C') {
             return this.kelvinToCelsius(measurement);
         }
@@ -34,12 +32,16 @@ class TemperatureInfo extends React.Component {
 
     render () {
         return (
-            <div>
-                <h5 id='unit' onClick={this.handleChangeUnit} clickable>{this.state.unit}</h5>
-                <p>Current temperature is: {this.unitConversion(this.props.data.currentTemp)} {this.state.unit}</p>
-                <p>Feels like: {this.unitConversion(this.props.data.feelsLikeTemperature)} {this.state.unit} </p>
-                <p>Max: {this.unitConversion(this.props.data.maxTemp)} {this.state.unit} </p>
-                <p>min: {this.unitConversion(this.props.data.minTemp)} {this.state.unit} </p>
+            <div id='unit' onClick={this.handleChangeUnit}>
+                {this.props.data.currentTemp &&
+                <div>Current temperature is: {this.unitConversion(this.props.data.currentTemp)} {this.state.unit}<br/></div>}
+                {this.props.data.feelsLikeTemperature &&
+                <div>Feels like: {this.unitConversion(this.props.data.feelsLikeTemperature)} {this.state.unit} <br/></div>}
+                {this.props.data.maxTemp &&
+                <div>Max: {this.unitConversion(this.props.data.maxTemp)} {this.state.unit} <br/></div>}
+                {this.props.data.minTemp &&
+                <div>Min: {this.unitConversion(this.props.data.minTemp)} {this.state.unit}<br/></div>}
+                <hr/>
             </div>
         );
     }
