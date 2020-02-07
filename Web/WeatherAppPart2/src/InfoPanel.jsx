@@ -8,12 +8,14 @@ import Precpitation from './Precipitation';
 class InfoPanel extends React.Component {
     render () {
         return (
-            <div>
-                <TemperatureInfo data={this.props.data}/>
+            <React.Fragment>
+                <br/>The weather in <b>{this.props.data.location}</b> is: <br/>
+                <hr/>
                 <QuickInfo data={this.props.data}/>
+                <TemperatureInfo data={this.props.data}/>
                 <WindInfo data={this.props.data}/>
                 <Precpitation data={this.props.data}/>
-            </div>
+            </React.Fragment>
         );
     }
 }
