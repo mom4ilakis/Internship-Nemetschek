@@ -3,6 +3,7 @@ from rest_framework.test import APIClient
 
 from post.models import Post
 from author.models import Author, User
+from comment.models import Comment, Reply
 
 
 @pytest.fixture
@@ -22,6 +23,27 @@ def another_author():
     another_author = Author(username='test_author_2', password='123456', avatar='none')
     another_author.save()
     return another_author
+
+
+@pytest.fixture
+def user2():
+    user2 = User(username='user2', password='123456')
+    user2.save()
+    return user2
+
+
+@pytest.fixture
+def commenting_user():
+    user = User(username='commenting_user', password='123456')
+    user.save()
+    return user
+
+
+@pytest.fixture
+def replying_user():
+    user = User(username='replying_user', password='123456')
+    user.save()
+    return user
 
 
 @pytest.fixture
@@ -56,3 +78,17 @@ def user_client(user):
     user_client = APIClient()
     user_client.force_authenticate(user=user)
     return user_client
+
+
+@pytest.fixture
+def replying_client(replying_user):
+    rep_client = APIClient()
+    rep_client.force_authenticate(user=replying_user)
+    return rep_client
+
+
+@pytest.fixture
+def comment(post, commenting_user):
+    comment = Comment(post=post, author=commenting_user, content='comment1')
+    comment.save()
+    return comment
