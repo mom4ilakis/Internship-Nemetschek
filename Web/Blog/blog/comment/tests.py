@@ -2,7 +2,7 @@ import pytest
 from rest_framework.test import APIClient
 from django.contrib.auth.models import User
 
-from datetime import date
+from datetime import datetime
 from author.models import Author
 from post.models import Post
 from comment.models import Comment
@@ -11,35 +11,6 @@ from comment.models import Comment
 @pytest.fixture
 def anon_client():
     return APIClient()
-
-
-@pytest.fixture
-def author():
-    author = Author(username='test_user', password='123456', avatar='none')
-    author.save()
-    return author
-
-
-@pytest.fixture
-def user():
-    user = User.objects.create(username='test_user', password='123456')
-    user.save()
-    return user
-
-
-@pytest.fixture
-def post(author):
-    post = Post(title='title', content='content', cover='cvr',
-                date=date.today(), author=author)
-    post.save()
-    return post
-
-
-@pytest.fixture
-def client(author):
-    client = APIClient()
-    client.force_authenticate(user=author)
-    return client
 
 
 @pytest.fixture
@@ -56,24 +27,35 @@ def test_get_no_comment(client):
 
 
 @pytest.mark.django_db
-def test_make_comment(client, post, author):
+def test_make_comment(client, post):
     result = client.post('/comments/', {
-        'author': author.pk,
         'post': post.pk,
         'content': 'new content',
     })
     assert result.status_code == 201
+    del result.data['date']
+    assert result.data == {
+        'post': post.pk,
+        'content': 'new content',
+        'author': {
+            'username': post.author.username,
+            'email': post.author.email,
+        },
+    }
 
 
 @pytest.mark.django_db
 def test_get_comment(client, comment):
     result = client.get(f'/comments/{comment.pk}/')
     assert result.status_code == 200
+    del result.data['date']
     assert result.data == {
         'content': comment.content,
         'post': comment.post.pk,
-        'date': str(comment.date),
-        'author': comment.author.pk,
+        'author': {
+            'username': comment.post.author.username,
+            'email': comment.post.author.email,
+        },
     }
 
 
@@ -101,3 +83,4 @@ def test_post_comment_no_post(client):
         'content': 'new content'
     })
     assert result.status_code == 400
+    
