@@ -10,12 +10,6 @@ from author.models import Author
 def client():
     return APIClient()
 
-@pytest.fixture
-def user():
-    user = User(password='123456', username='user')
-    user.save()
-    return user
-
 
 @pytest.fixture
 def author():
@@ -25,10 +19,21 @@ def author():
 
 
 @pytest.mark.django_db
-def test_user_creation(user, client):
+def test_author_creation(client):
     result = client.post('/authors/', {
-        'username': user.username,
-        'password': user.password,
-
+        'username': 'user',
+        'password': '1235456',
+        'avatar': 'path_to_avatar'
     })
     assert result.status_code == 201
+
+
+@pytest.mark.django_db
+def test_author_retrieve(client, author):
+    result = client.get(f'/authors/{author.pk}/')
+    assert result.status_code == 200
+    assert result.data == {
+        'username': author.username,
+        'avatar': author.avatar,
+        'email': author.email
+    }
