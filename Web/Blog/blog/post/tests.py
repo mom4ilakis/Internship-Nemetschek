@@ -1,6 +1,4 @@
 import pytest
-from datetime import datetime
-
 
 
 @pytest.mark.django_db
@@ -26,7 +24,9 @@ def test_create_post(client, author):
         'author': {
             'username': author.username,
             'email': author.email,
-            'avatar': author.avatar
+            'avatar': author.avatar,
+            'first_name': author.first_name,
+            'last_name': author.last_name
         },
     }
 
@@ -59,7 +59,10 @@ def test_get_existing_post(client, post):
         'cover': post.cover,
         'author': {'username': post.author.username,
                    'email': post.author.email,
-                   'avatar': post.author.avatar}
+                   'avatar': post.author.avatar,
+                   'first_name': post.author.first_name,
+                   'last_name': post.author.last_name
+                   }
     }
 
 

@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from rest_framework import permissions
 
+from blog_app.permissions import CommentPermission
 from .serializers import CommentSerializer, ReplySerializer
 from .models import Comment, Reply
 
 
 class CommentViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [CommentPermission]
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
@@ -16,7 +16,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 
 class ReplyViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [CommentPermission]
     queryset = Reply.objects.all()
     serializer_class = ReplySerializer
 

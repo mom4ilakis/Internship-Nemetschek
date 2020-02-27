@@ -21,7 +21,7 @@ def test_author_creation(client):
     result = client.post('/authors/', {
         'username': 'user',
         'password': '1235456',
-        'avatar': 'path_to_avatar'
+        'avatar': 'path_to_avatar',
     })
     assert result.status_code == 201
 
@@ -33,5 +33,7 @@ def test_author_retrieve(client, author):
     assert result.data == {
         'username': author.username,
         'avatar': author.avatar,
-        'email': author.email
+        'email': author.email,
+        'first_name': author.first_name,
+        'last_name': author.last_name
     }

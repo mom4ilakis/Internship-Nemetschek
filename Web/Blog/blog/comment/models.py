@@ -18,7 +18,10 @@ class Comment(models.Model):
 
 class Reply(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment,
+                                on_delete=models.CASCADE,
+                                related_name='replies'
+                                )
 
     content = models.CharField(max_length=300)
     date = models.DateTimeField(default=datetime.now)

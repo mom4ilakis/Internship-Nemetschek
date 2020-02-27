@@ -3,7 +3,7 @@ from rest_framework.test import APIClient
 
 from post.models import Post
 from author.models import Author, User
-from comment.models import Comment
+from comment.models import Comment, Reply
 
 
 @pytest.fixture
@@ -95,3 +95,10 @@ def comment(post, commenting_user):
     comment = Comment(post=post, author=commenting_user, content='comment1')
     comment.save()
     return comment
+
+
+@pytest.fixture
+def reply(comment, replying_user):
+    reply = Reply(comment=comment, content='content', author=replying_user)
+    reply.save()
+    return reply

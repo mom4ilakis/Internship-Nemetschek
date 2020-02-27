@@ -1,6 +1,5 @@
 import pytest
 from rest_framework.test import APIClient
-from django.contrib.auth.models import User
 
 from comment.models import Comment, Reply
 
@@ -37,6 +36,8 @@ def test_make_comment(client, post):
         'author': {
             'username': post.author.username,
             'email': post.author.email,
+            'first_name': post.author.first_name,
+            'last_name': post.author.last_name,
         },
     }
 
@@ -52,6 +53,8 @@ def test_get_comment(client, comment):
         'author': {
             'username': comment.post.author.username,
             'email': comment.post.author.email,
+            'first_name': comment.author.first_name,
+            'last_name': comment.author.last_name,
         },
     }
 
@@ -84,8 +87,11 @@ def test_post_comment_no_post(client):
 
 @pytest.fixture
 def reply(comment, replying_user):
-    reply = Reply(author=replying_user, content='ala bala orange',
-                  comment=comment)
+    reply = Reply(
+        author=replying_user,
+        content='ala bala orange',
+        comment=comment
+    )
     reply.save()
     return reply
 
@@ -103,6 +109,8 @@ def test_make_reply(comment, replying_client, replying_user):
         'author': {
             'username': replying_user.username,
             'email': replying_user.email,
+            'first_name': replying_user.first_name,
+            'last_name': replying_user.last_name,
         },
         'comment': comment.pk
     }
@@ -118,7 +126,9 @@ def test_get_reply(reply, replying_client):
         'content': reply.content,
         'author': {
             'username': reply.author.username,
-            'email': reply.author.email
+            'email': reply.author.email,
+            'first_name': reply.author.first_name,
+            'last_name': reply.author.last_name,
         },
         'comment': reply.comment.pk
     }
@@ -126,7 +136,7 @@ def test_get_reply(reply, replying_client):
 
 @pytest.mark.django_db
 def test_get_non_existing_reply(replying_client):
-    result = replying_client.get('/replies/1/')
+    result = replying_client.get('/replies/999999999999/')
     assert result.status_code == 404
 
 
@@ -150,14 +160,44 @@ def test_get_reply_anon_user(reply, anon_client):
         'comment': reply.comment.pk,
         'author': {
             'username': reply.author.username,
-            'email': reply.author.email
+            'email': reply.author.email,
+            'first_name': reply.author.first_name,
+            'last_name': reply.author.last_name,
         }
     }
 
 
 @pytest.mark.django_db
-def test_reply_non_existing_comment(replying_client):
+def test_reply_on_non_existing_comment(replying_client):
     result = replying_client.post('/replies/', {
+        'comment': 9999999999999999,
         'content': 'max'
     })
     assert result.status_code == 400
+
+
+@pytest.mark.django_db
+def test_change_reply(replying_client, reply):
+    result = replying_client.patch(f'/replies/{reply.pk}/', {
+        'content': 'new content'
+    })
+    assert result.status_code == 200
+    del result.data['date']
+    assert result.data == {
+        'comment': reply.comment.pk,
+        'content': 'new content',
+        'author': {
+            'username': reply.author.username,
+            'email': reply.author.email,
+            'first_name': reply.author.first_name,
+            'last_name': reply.author.last_name,
+        }
+    }
+
+
+@pytest.mark.django_db
+def test_change_reply_wrong_user(reply, user_client):
+    result = user_client.patch(f'/replies/{reply.pk}/', {
+        'content': 'new content'
+    })
+    assert result.status_code == 403
