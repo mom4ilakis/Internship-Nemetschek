@@ -2,7 +2,6 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework import permissions
 
-from blog_app.permissions import IsOwnerOrReadOnly
 from .serializers import CommentSerializer, ReplySerializer
 from .models import Comment, Reply
 

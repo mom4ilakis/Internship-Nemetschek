@@ -11,4 +11,3 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ['title', 'content', 'author', 'cover', 'date']
         read_only_fields = ['date', 'author']
-

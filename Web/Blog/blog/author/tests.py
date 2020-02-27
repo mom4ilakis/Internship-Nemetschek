@@ -1,7 +1,5 @@
 import pytest
-from datetime import date
 from rest_framework.test import APIClient
-from django.contrib.auth.models import User
 
 from author.models import Author
 

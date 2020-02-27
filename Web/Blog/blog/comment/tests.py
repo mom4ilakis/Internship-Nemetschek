@@ -84,7 +84,8 @@ def test_post_comment_no_post(client):
 
 @pytest.fixture
 def reply(comment, replying_user):
-    reply = Reply(author=replying_user, content='ala bala orange', comment=comment)
+    reply = Reply(author=replying_user, content='ala bala orange',
+                  comment=comment)
     reply.save()
     return reply
 

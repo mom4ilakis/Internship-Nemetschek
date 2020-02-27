@@ -3,7 +3,7 @@ from rest_framework.test import APIClient
 
 from post.models import Post
 from author.models import Author, User
-from comment.models import Comment, Reply
+from comment.models import Comment
 
 
 @pytest.fixture
@@ -20,7 +20,9 @@ def author():
 
 @pytest.fixture
 def another_author():
-    another_author = Author(username='test_author_2', password='123456', avatar='none')
+    another_author = Author(username='test_author_2',
+                            password='123456',
+                            avatar='none')
     another_author.save()
     return another_author
 
@@ -68,7 +70,8 @@ def post(author):
 
 @pytest.fixture
 def user():
-    user = User.objects.create(username='non_author_test_user', password='123456')
+    user = User.objects.create(username='non_author_test_user',
+                               password='123456')
     user.save()
     return user
 
