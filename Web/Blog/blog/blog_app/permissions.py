@@ -1,5 +1,4 @@
 from rest_framework import permissions
-
 from author.models import Author
 
 
@@ -45,17 +44,3 @@ class CommentPermission(permissions.BasePermission):
         # Instance must have an attribute named `owner`.
         return obj and obj.author == request.user
 
-
-class IsReplyOrReadOnlyOrOwner(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        if obj and obj.author == request.user:
-            return True
-        if request.method == 'PATCH':
-            return not any(filter(lambda key: key != 'reply',
-                           request.data.keys()))
-        return False
-
-    def has_permission(self, request):
-        return True
