@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Replies from 'replies';
+import Replies from './Replies';
 
 class Comment extends React.Component {
     render () {
@@ -21,3 +21,5 @@ class Comment extends React.Component {
 Comment.propTypes = {
     comment: PropTypes.object
 };
+
+export default Comment;
