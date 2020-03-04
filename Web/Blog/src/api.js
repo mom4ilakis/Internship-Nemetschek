@@ -7,10 +7,18 @@ const request = axios.create({
 });
 
 const api = {
-    get: (target_url) => {},
-    post: (target_url, data, user) => {},
-    patch: (target_url, new_data, user) => {},
-    delete: (target_url, user) => {},
+    get: (url, auth_token) => {
+        request.get(url, { Authorisation: `Token : ${auth_token}` });
+    },
+    post: (url, data, auth_token) => {
+        request.patch(url, data, { Authorisation: `Token : ${auth_token}` });
+    },
+    patch: (url, new_data, auth_token) => {
+        request.patch(url, new_data, { Authorisation: `Token : ${auth_token}` });
+    },
+    delete: (url, user, auth_token) => {
+        request.delete(url, { Authorisation: `Token : ${auth_token}` });
+    },
     login: (name, pass) => {
         const response = request.post('/auth/', {
             username: name,
@@ -18,7 +26,8 @@ const api = {
         });
         return response;
     },
-    logout: () => {}
+    logout: () => {
+    }
 
 };
 
