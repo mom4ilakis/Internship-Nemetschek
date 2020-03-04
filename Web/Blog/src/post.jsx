@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Comment from 'comment';
+import Comment from './Comment';
 
 class Post extends React.Component {
     render () {
@@ -23,3 +23,5 @@ Post.propTypes = {
     content: PropTypes.string,
     comment: PropTypes.object
 };
+
+export default Post;
