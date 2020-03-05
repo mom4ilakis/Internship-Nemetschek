@@ -7,7 +7,6 @@ import api from './api';
 import utils from './utils';
 
 class Post extends React.Component {
-
     state = {
         data: {}
     }
@@ -32,6 +31,7 @@ class Post extends React.Component {
                     <br/>
                     Time:
                     {utils.formatTime(this.state.data.date)}
+                    <Comments postID={this.props.match.params.postID}/>
                 </div>
             </React.Fragment>
 
