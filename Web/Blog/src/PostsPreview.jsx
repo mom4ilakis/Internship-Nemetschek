@@ -1,6 +1,8 @@
 import React from 'react';
 import api from './api';
 import utils from './utils';
+import { Link, Router, Route, Switch } from 'react-router-dom';
+import Post from './Post';
 
 class PostsPreview extends React.Component {
     state = {
@@ -19,8 +21,10 @@ class PostsPreview extends React.Component {
         return (
             <React.Fragment>
                 {this.state.data.map(p =>
-                    <div key='postList' align='left'>
-                        <h2>{p.title}</h2>
+                    <div key={`post${p.id}`} align='left'>
+                        <Link to={`/posts/${p.id}`}>
+                            <h2>{p.title}</h2>
+                        </Link>
                         <br/>
                         <img src={p.cover}/>
                         <br/>
