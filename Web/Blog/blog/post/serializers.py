@@ -10,7 +10,7 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['title', 'content', 'author', 'cover', 'date']
-        read_only_fields = ['date', 'author']
+        read_only_fields = ['date', 'author',]
 
 
 class PostPreviewSerializer(serializers.ModelSerializer):
@@ -18,5 +18,5 @@ class PostPreviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['title', 'author', 'cover', 'date']
-        read_only_fields = ['title', 'author', 'cover', 'date']
+        fields = ['title', 'author', 'cover', 'date', 'id']
+        read_only_fields = ['title', 'author', 'cover', 'date', 'id']
