@@ -18,11 +18,14 @@ class App extends React.Component {
             <Router>
                 <Link to='/authors/'>Authors</Link>
                 <br/>
+                <Link to='/'>Home</Link>
+                <br/>
                 <Link to='/login/'>log in</Link>
                 <Switch>
                     <Route exact path='/'><HomePage/></Route>
                     <Route exact path='/authors/'>Authors</Route>
                     <Route exact path='/login/'><Login/></Route>
+                    <Route exact path='/posts/:postID/' component={Post}/>
                 </Switch>
             </Router>
         );
