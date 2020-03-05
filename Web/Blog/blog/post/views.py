@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from blog_app.permissions import IsOwnerOrReadOnly
 from .serializers import PostSerializer, PostPreviewSerializer
@@ -15,6 +15,6 @@ class PostViewSet(ModelViewSet):
         serializer.save(author=self.request.user)
 
 
-class PostPreviewSet(ModelViewSet):
+class PostPreviewSet(ReadOnlyModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostPreviewSerializer
