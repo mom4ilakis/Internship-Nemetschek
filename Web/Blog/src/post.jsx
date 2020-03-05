@@ -1,27 +1,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Comment from './Comment';
+import Comments from './Comments';
+import { useParams } from 'react-router';
+
+import api from './api';
+import utils from './utils';
 
 class Post extends React.Component {
+
+    state = {
+        data: {}
+    }
+
+    componentDidMount () {
+        const postID = this.props.match.params.postID;
+        api.get(`/posts/${postID}/`)
+            .then(({ data }) => {
+                this.setState({ data: data });
+            })
+            .catch(err => console.log(err));
+    }
+
     render () {
         return (
             <React.Fragment>
                 <div>
-                    <h3>{this.props.title}</h3>
-                    <image src={this.props.cover}/>
-                    <p>{this.props.content}</p>
+                    <h3>{this.state.data.title}</h3>
+                    <img src={this.state.data.cover}/>
+                    <p>{this.state.data.content}</p>
+                    {utils.formatDate(this.state.data.date)}
+                    <br/>
+                    Time:
+                    {utils.formatTime(this.state.data.date)}
                 </div>
-                <Comment comment={this.props.comment}/>
             </React.Fragment>
 
         );
     }
 }
-Post.propTypes = {
-    title: PropTypes.string,
-    cover: PropTypes.string,
-    content: PropTypes.string,
-    comment: PropTypes.object
-};
-
 export default Post;
