@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
-        fields =['username', 'email', 'avatar', 'first_name', 'last_name']
+        fields = ['username', 'email', 'avatar', 'first_name', 'last_name']
 
 
 class UsernameSerializer(serializers.ModelSerializer):
