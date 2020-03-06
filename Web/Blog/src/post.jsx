@@ -23,7 +23,7 @@ class Post extends React.Component {
     render () {
         return (
             <React.Fragment>
-                <div>
+                <div style={{ borderStyle: 'solid' }}>
                     <h3>{this.state.data.title}</h3>
                     <img src={this.state.data.cover}/>
                     <p>{this.state.data.content}</p>
@@ -32,10 +32,14 @@ class Post extends React.Component {
                     Time:
                     {utils.formatTime(this.state.data.date)}
                     <Comments postID={this.props.match.params.postID}/>
+                    <br/>
                 </div>
             </React.Fragment>
 
         );
     }
+}
+Post.propTypes = {
+    match: PropTypes.object
 }
 export default Post;
