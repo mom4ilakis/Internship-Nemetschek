@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Replies from './Replies';
 
+import Comment from './Comment';
 import api from './api';
-import utils from './utils';
 
 class Comments extends React.Component {
     state = {
@@ -14,7 +13,6 @@ class Comments extends React.Component {
         const postID = this.props.postID;
         api.get(`/comments_on_post/${postID}/`)
             .then(({ data }) => {
-                console.log(data);
                 this.setState({ data: data });
             })
             .catch(err => console.log(err));
@@ -23,26 +21,18 @@ class Comments extends React.Component {
     render () {
         return (
             <React.Fragment>
-                {
-                    this.state.data.map(comment =>
-                        <div key={`comment_ ${comment.pk}`}>
-                            <p>
-                                {comment.content}
-                            </p>
-                            {comment.author}
-                            <br/>;
-                            {utils.formatDate(comment.date)}
-                            {utils.formatTime(comment.date)}
-                        </div>
-                    )
-                }
-
+                {this.state.data.map(comment =>
+                    <React.Fragment key={comment.pk}>
+                        <Comment pk={comment.pk} content={comment.content} author={comment.author} date={comment.date} replies={comment.replies} />
+                        <br/>
+                    </React.Fragment>
+                )}
             </React.Fragment>
         );
     }
 }
-Comment.propTypes = {
-    comments: PropTypes.array
+Comments.propTypes = {
+    postID: PropTypes.string
 };
 
 export default Comments;
