@@ -14,8 +14,10 @@ class Login extends React.Component {
         console.log(this.state);
         api.login(this.state.username, this.state.pass)
             .then(({ data }) => {
-                console.log(data);
-                this.setState({ token: data.token });
+                if (data) {
+                    window.localStorage.setItem('token', data.token);
+                    this.props.callback();
+                }
             })
             .catch(err => console.log(err));
     }
@@ -32,7 +34,6 @@ class Login extends React.Component {
                 Password:
                 <input type='password' name='pass' onChange={this.handleInputChange}/>
                 <button onClick={this.handleLogin}>Login</button>
-                {this.state.token}
             </div>
         );
     }
