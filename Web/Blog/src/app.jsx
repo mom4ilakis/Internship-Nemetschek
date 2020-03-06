@@ -9,8 +9,17 @@ class App extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
-            user_token: null
+            logged: false
         };
+    }
+
+    userLoggedIn = () => {
+        console.log('Logged in.');
+        this.setState({ logged: true });
+    }
+
+    userLoggedOut = () => {
+        this.setState({ logged: false });
     }
 
     render () {
@@ -24,7 +33,7 @@ class App extends React.Component {
                 <Switch>
                     <Route exact path='/'><HomePage/></Route>
                     <Route exact path='/authors/'>Authors</Route>
-                    <Route exact path='/login/'><Login/></Route>
+                    <Route exact path='/login/'><Login callback={this.userLoggedIn}/></Route>
                     <Route exact path='/posts/:postID/' component={Post}/>
                 </Switch>
             </Router>
