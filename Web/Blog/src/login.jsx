@@ -39,4 +39,7 @@ class Login extends React.Component {
     }
 }
 
+Login.propTypes = {
+    callback: PropTypes.func
+};
 export default Login;
