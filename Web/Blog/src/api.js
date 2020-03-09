@@ -3,26 +3,30 @@ import axios from 'axios';
 const request = axios.create({
     baseURL: 'http://localhost:8000',
     timeout: 1000,
-    headers: {}
+    headers: {},
+    token: null
 });
 
 const api = {
-    get: (url, auth_token) => {
-        return request.get(url, { Authorisation: `Token : ${auth_token}` });
+    get: (url) => {
+        return request.get(url, { Authorization: `Token ${request.token}` });
     },
-    post: (url, data, auth_token) => {
-        return request.patch(url, data, { Authorisation: `Token : ${auth_token}` });
+    post: (url, data) => {
+        return request.post(url, data, { headers: { Authorization: `Token ${request.token}` } });
     },
-    patch: (url, new_data, auth_token) => {
-        return request.patch(url, new_data, { Authorisation: `Token : ${auth_token}` });
+    patch: (url, new_data) => {
+        return request.patch(url, new_data, { Authorization: `Token ${request.token}` });
     },
-    delete: (url, user, auth_token) => {
-        return request.delete(url, { Authorisation: `Token : ${auth_token}` });
+    delete: (url) => {
+        return request.delete(url, { Authorization: `Token ${request.token}` });
     },
     login: (name, pass) => {
         const response = request.post('/auth/', {
             username: name,
             password: pass
+        });
+        response.then(({ data }) => {
+            request.token = data.token;
         });
         return response;
     },
