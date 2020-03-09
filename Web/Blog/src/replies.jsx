@@ -9,12 +9,10 @@ class Replies extends React.Component {
             <div>
                 {
                     this.props.replies.map(reply =>
-                        <div style={{ borderStyle: 'solid' }} key={reply.id}>
-                            {reply.content}
-                            <br/>
-                            {reply.author.username}
-                            <br/>
-                            {reply.date}
+                        <div className='reply' key={reply.id}>
+                            <p>{reply.content}</p>
+                            <div className='author'>{reply.author.username}</div>
+                            <div className='posted'>{`${utils.formatDate(reply.date)} ${utils.formatTime(reply.date)}`}</div>
                         </div>
                     )
                 }
