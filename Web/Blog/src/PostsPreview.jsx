@@ -1,8 +1,7 @@
 import React from 'react';
 import api from './api';
 import utils from './utils';
-import { Link, Router, Route, Switch } from 'react-router-dom';
-import Post from './Post';
+import { Link } from 'react-router-dom';
 
 class PostsPreview extends React.Component {
     state = {
