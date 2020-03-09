@@ -8,8 +8,8 @@ class ReplySerializer(serializers.ModelSerializer):
     author = UserSerializer(read_only=True, required=False)
 
     class Meta:
-        fields = ['author', 'content', 'date', 'comment']
-        read_only_fields = ['date', 'author']
+        fields = ['id', 'author', 'content', 'date', 'comment']
+        read_only_fields = ['id', 'date', 'author']
         model = Reply
 
 
@@ -18,8 +18,8 @@ class CommentSerializer(serializers.ModelSerializer):
     replies = ReplySerializer(read_only=True, many=True)
 
     class Meta:
-        fields = ['author', 'content', 'date', 'post', 'replies']
-        read_only_fields = ['date', 'author', 'replies']
+        fields = ['id', 'author', 'content', 'date', 'post', 'replies']
+        read_only_fields = ['id', 'date', 'author', 'replies']
         model = Comment
 
 
