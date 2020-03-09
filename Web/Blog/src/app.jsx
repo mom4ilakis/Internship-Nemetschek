@@ -3,6 +3,7 @@ import Post from './Post';
 import HomePage from './PostsPreview';
 import Login from './Login';
 import api from './api';
+
 import { BrowserRouter as Router, Switch, Link, Route } from 'react-router-dom';
 
 class App extends React.Component {
@@ -34,7 +35,7 @@ class App extends React.Component {
                     <Route exact path='/'><HomePage/></Route>
                     <Route exact path='/authors/'>Authors</Route>
                     <Route exact path='/login/'><Login callback={this.userLoggedIn}/></Route>
-                    <Route exact path='/posts/:postID/' component={Post}/>
+                    <Route exact path='/posts/:postID/' render={ (routeProps) => <Post {...routeProps} logged={this.state.logged}/>}/>
                 </Switch>
             </Router>
         );
