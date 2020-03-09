@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Comments from './Comments';
-import { useParams } from 'react-router';
 
 import api from './api';
 import utils from './utils';
@@ -31,15 +30,17 @@ class Post extends React.Component {
                     <br/>
                     Time:
                     {utils.formatTime(this.state.data.date)}
-                    <Comments postID={this.props.match.params.postID}/>
+                    <Comments postID={this.props.match.params.postID} token={this.state.token} logged={this.props.logged}/>
                     <br/>
                 </div>
             </React.Fragment>
 
         );
     }
-}
+};
+
 Post.propTypes = {
-    match: PropTypes.object
-}
+    match: PropTypes.object,
+    logged: PropTypes.bool
+};
 export default Post;
