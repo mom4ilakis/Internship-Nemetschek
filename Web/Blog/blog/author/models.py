@@ -1,9 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 
-class Author(User):
+class User(AbstractUser):
     avatar = models.CharField(max_length=300)
-
-    def __str__(self):
-        return f"<Author username={self.username} email={self.email}>"
+    is_author = models.BooleanField(default=False)
