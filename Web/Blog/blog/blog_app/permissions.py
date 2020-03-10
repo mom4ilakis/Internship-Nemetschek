@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from author.models import Author
+from author.models import User
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
@@ -11,7 +11,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.method == 'POST':
             return request.user.is_authenticated and \
-                isinstance(request.user, Author)
+                request.user.is_author
         return True
 
     def has_object_permission(self, request, view, obj):
