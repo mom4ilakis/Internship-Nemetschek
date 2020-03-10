@@ -1,8 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import User
 from datetime import datetime
 
 from post.models import Post
+from author.models import User
 
 
 class Comment(models.Model):
