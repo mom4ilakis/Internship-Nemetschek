@@ -32,8 +32,13 @@ def test_make_comment(client, post):
     del result.data['date']
     assert result.data == {
         'post': post.pk,
+        'id': 1,
         'content': 'new content',
+        'replies': [],
         'author': {
+            'id': post.author.id,
+            'avatar': post.author.avatar,
+            'is_author': post.author.is_author,
             'username': post.author.username,
             'email': post.author.email,
             'first_name': post.author.first_name,
@@ -48,9 +53,14 @@ def test_get_comment(client, comment):
     assert result.status_code == 200
     del result.data['date']
     assert result.data == {
+        'id': comment.id,
         'content': comment.content,
         'post': comment.post.pk,
+        'replies': [],
         'author': {
+            'id': comment.post.author.id,
+            'avatar': comment.post.author.avatar,
+            'is_author': comment.post.author.is_author,
             'username': comment.post.author.username,
             'email': comment.post.author.email,
             'first_name': comment.author.first_name,
@@ -106,7 +116,11 @@ def test_make_reply(comment, replying_client, replying_user):
     del result.data['date']
     assert result.data == {
         'content': 'mad',
+        'id': 1,
         'author': {
+            'id': replying_user.id,
+            'avatar': replying_user.avatar,
+            'is_author': replying_user.is_author,
             'username': replying_user.username,
             'email': replying_user.email,
             'first_name': replying_user.first_name,
@@ -123,8 +137,12 @@ def test_get_reply(reply, replying_client):
     assert result.status_code == 200
     del result.data['date']
     assert result.data == {
+        'id': reply.id,
         'content': reply.content,
         'author': {
+            'id': reply.author.id,
+            'avatar': reply.author.avatar,
+            'is_author': reply.author.is_author,
             'username': reply.author.username,
             'email': reply.author.email,
             'first_name': reply.author.first_name,
@@ -156,9 +174,13 @@ def test_get_reply_anon_user(reply, anon_client):
     assert result.status_code == 200
     del result.data['date']
     assert result.data == {
+        'id': reply.id,
         'content': reply.content,
         'comment': reply.comment.pk,
         'author': {
+            'id': reply.author.id,
+            'avatar': reply.author.avatar,
+            'is_author': reply.author.is_author,
             'username': reply.author.username,
             'email': reply.author.email,
             'first_name': reply.author.first_name,
@@ -184,9 +206,13 @@ def test_change_reply(replying_client, reply):
     assert result.status_code == 200
     del result.data['date']
     assert result.data == {
+        'id': reply.id,
         'comment': reply.comment.pk,
         'content': 'new content',
         'author': {
+            'id': reply.author.id,
+            'avatar': reply.author.avatar,
+            'is_author': reply.author.is_author,
             'username': reply.author.username,
             'email': reply.author.email,
             'first_name': reply.author.first_name,
