@@ -2,7 +2,7 @@ import pytest
 from rest_framework.test import APIClient
 
 from post.models import Post
-from author.models import Author, User
+from author.models import User
 from comment.models import Comment, Reply
 
 
@@ -13,16 +13,19 @@ def anon_client():
 
 @pytest.fixture
 def author():
-    author = Author(username='test_author', password='123456', avatar='none')
+    author = User(username='test_author', password='123456', avatar='none', is_author=True)
     author.save()
     return author
 
 
 @pytest.fixture
 def another_author():
-    another_author = Author(username='test_author_2',
-                            password='123456',
-                            avatar='none')
+    another_author = User(
+        username='test_author_2',
+        password='123456',
+        avatar='none', 
+        is_author=True
+    )
     another_author.save()
     return another_author
 
