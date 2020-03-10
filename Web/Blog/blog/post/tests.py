@@ -22,12 +22,14 @@ def test_create_post(client, author):
         'content': 'content',
         'cover': 'cvr',
         'author': {
+            'id': author.id,
             'username': author.username,
             'email': author.email,
             'avatar': author.avatar,
             'first_name': author.first_name,
-            'last_name': author.last_name
-        },
+            'last_name': author.last_name,
+            'is_author': author.is_author
+        }
     }
 
 
@@ -57,12 +59,15 @@ def test_get_existing_post(client, post):
         'title': post.title,
         'content': post.content,
         'cover': post.cover,
-        'author': {'username': post.author.username,
-                   'email': post.author.email,
-                   'avatar': post.author.avatar,
-                   'first_name': post.author.first_name,
-                   'last_name': post.author.last_name
-                   }
+        'author': {
+            'id': post.author.id,
+            'username': post.author.username,
+            'email': post.author.email,
+            'avatar': post.author.avatar,
+            'first_name': post.author.first_name,
+            'last_name': post.author.last_name,
+            'is_author': post.author.is_author
+        }
     }
 
 
