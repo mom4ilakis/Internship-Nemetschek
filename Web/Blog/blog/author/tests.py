@@ -1,7 +1,7 @@
 import pytest
 from rest_framework.test import APIClient
 
-from author.models import Author
+from author.models import User
 
 
 @pytest.fixture
@@ -11,7 +11,7 @@ def client():
 
 @pytest.fixture
 def author():
-    author = Author(username='author', password='123456', avatar='avtr')
+    author = User(username='author', password='123456', avatar='avtr', is_author=True)
     author.save()
     return author
 
@@ -31,6 +31,8 @@ def test_author_retrieve(client, author):
     result = client.get(f'/authors/{author.pk}/')
     assert result.status_code == 200
     assert result.data == {
+        'id': author.id,
+        'is_author': author.is_author,
         'username': author.username,
         'avatar': author.avatar,
         'email': author.email,
