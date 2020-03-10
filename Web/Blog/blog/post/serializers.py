@@ -1,11 +1,11 @@
 from .models import Post
 from rest_framework import serializers
 
-from author.serializers import AuthorSerializer, UsernameSerializer
+from author.serializers import UserSerializer, UsernameSerializer
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer(read_only=True, required=False)
+    author = UserSerializer(read_only=True, required=False)
 
     class Meta:
         model = Post
