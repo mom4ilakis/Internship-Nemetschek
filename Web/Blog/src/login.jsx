@@ -15,8 +15,12 @@ class Login extends React.Component {
         api.login(this.state.username, this.state.pass)
             .then(({ data }) => {
                 if (data) {
-                    window.localStorage.setItem('token', data.token);
-                    this.props.callback();
+                    api.get(`authors/${data.user_id}/`)
+                        .then(({ data }) => {
+                            this.props.callback(data.is_author);
+                            window.localStorage.setItem('token', data.token);
+                        })
+                        .catch(err => { console.log(err); });
                 }
             })
             .catch(err => console.log(err));
