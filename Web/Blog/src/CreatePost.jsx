@@ -17,14 +17,13 @@ class CreatePost extends React.Component {
 
     handlePost = () => {
         console.log(this.state);
-        api.post('/posts/', { title: this.state.title, content: this.state.content, cover: this.state.cover });
-        this.props.history.push('/');
+        const response = api.post('/posts/', { title: this.state.title, content: this.state.content, cover: this.state.cover });
+        response.then(({ data }) => {
+            this.props.history.push(`/posts/${data.id}`);
+        });
     }
 
     handleChange = (event) => {
-        console.log(event.target);
-        console.log(event.target.value);
-
         this.setState({ [event.target.id]: event.target.value });
     }
 
@@ -32,15 +31,22 @@ class CreatePost extends React.Component {
         return (
             <React.Fragment>
                 { this.props.isAuthor &&
-                    <div>
-                        Title:
-                        <input type='text' id='title' onChange={this.handleChange}/>
-                        Content:
-                        <textarea id='content' onChange={this.handleChange}/>
-                        Cover:
-                        <input type='text' id='cover' onChange={this.handleChange}/>
-                        <button onClick={this.handlePost}>Post</button>
-                        <button onClick={this.handleCancel}>Cancel</button>
+                    <div className='box'>
+
+                        <label className='label'>Title</label>
+                        <input type='text' className='input' id='title' onChange={this.handleChange}/>
+
+                        <label className='label'>Content</label>
+                        <textarea id='content' className='input' onChange={this.handleChange}/>
+
+                        <label className='label'>Cover</label>
+                        <input type='text' className='input' id='cover' onChange={this.handleChange}/>
+
+                        <div className='buttons has-addons'>
+                            <button className='button is-primary' onClick={this.handlePost}>Post</button>
+                            <button className='button is-danger' onClick={this.handleCancel}>Cancel</button>
+                        </div>
+
                     </div>}
                 {!this.props.isAuthor &&
                     <div>
