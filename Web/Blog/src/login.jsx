@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter, Link } from 'react-router-dom';
 
 import api from './api';
 
@@ -11,17 +12,13 @@ class Login extends React.Component {
     };
 
     handleLogin = () => {
-        console.log(this.state);
         api.login(this.state.username, this.state.pass)
             .then(({ data }) => {
-                if (data) {
-                    api.get(`authors/${data.user_id}/`)
-                        .then(({ data }) => {
-                            this.props.callback(data.is_author);
-                            window.localStorage.setItem('token', data.token);
-                        })
-                        .catch(err => { console.log(err); });
-                }
+                this.props.callback(data);
+                window.localStorage.setItem('token', data.token);
+                window.localStorage.setItem('userID', data.userID);
+                window.localStorage.setItem('isAuthor', data.isAuthor);
+                this.props.history.push('/');
             })
             .catch(err => console.log(err));
     }
@@ -32,12 +29,15 @@ class Login extends React.Component {
 
     render () {
         return (
-            <div>
-                Username:
+            <div className='box'>
+                <label className='label'>Username</label>
                 <input type='text' name='username' onChange={this.handleInputChange}/>
-                Password:
+                <label className='label'>Password:</label>
                 <input type='password' name='pass' onChange={this.handleInputChange}/>
-                <button onClick={this.handleLogin}>Login</button>
+                <div className='buttons'>
+                    <button className='button is-primary' onClick={this.handleLogin}>Login</button>
+                    <Link className='button is-info' to='/'>Cancel</Link>
+                </div>
             </div>
         );
     }
@@ -46,4 +46,4 @@ class Login extends React.Component {
 Login.propTypes = {
     callback: PropTypes.func
 };
-export default Login;
+export default withRouter(Login);
