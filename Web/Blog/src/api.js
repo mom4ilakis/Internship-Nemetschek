@@ -8,6 +8,9 @@ const request = axios.create({
 });
 
 const api = {
+    loadTokenLocalStorage: () => {
+        request.token = window.localStorage.getItem('token');
+    },
     get: (url) => {
         return request.get(url, { Authorization: `Token ${request.token}` });
     },
@@ -15,10 +18,11 @@ const api = {
         return request.post(url, data, { headers: { Authorization: `Token ${request.token}` } });
     },
     patch: (url, new_data) => {
-        return request.patch(url, new_data, { Authorization: `Token ${request.token}` });
+        return request.patch(url, new_data, { headers: { Authorization: `Token ${request.token}` } });
     },
     delete: (url) => {
-        return request.delete(url, { Authorization: `Token ${request.token}` });
+        console.log(request.token);
+        return request.delete(url, { headers: { Authorization: `Token ${request.token}` } });
     },
     login: (name, pass) => {
         const response = request.post('/auth/', {
@@ -31,6 +35,7 @@ const api = {
         return response;
     },
     logout: () => {
+        request.token = null;
     }
 
 };
