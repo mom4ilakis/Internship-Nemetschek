@@ -32,11 +32,11 @@ class Comments extends React.Component {
     render () {
         return (
             <React.Fragment>
-                {this.props.logged && <input type='text' id={`commentBox-${this.props.postID}`} />}
-                {this.props.logged && <button name='commentButton' onClick={this.handleCommentSubmit}>Comment</button>}
+                {this.props.logged && <input type='text' className='input' id={`commentBox-${this.props.postID}`} />}
+                {this.props.logged && <button name='commentButton' className='button is-normal is-prim' onClick={this.handleCommentSubmit}>Comment</button>}
                 {this.state.data.map(comment =>
                     <React.Fragment key={comment.id}>
-                        <Comment comment={comment} logged={this.props.logged}/>
+                        <Comment comment={comment} logged={this.props.logged} userID={this.props.userID}/>
                         <br/>
                     </React.Fragment>
                 )}
@@ -46,7 +46,8 @@ class Comments extends React.Component {
 }
 Comments.propTypes = {
     postID: PropTypes.string,
-    logged: PropTypes.bool
+    logged: PropTypes.bool,
+    userID: PropTypes.number
 };
 
 export default Comments;
