@@ -13,34 +13,47 @@ class App extends React.Component {
         super(props);
         this.state = {
             logged: false,
-            isAuthor: false
+            isAuthor: false,
+            userID: null
         };
     }
 
-    userLoggedIn = (isAuthor) => {
-        this.setState({ logged: true, isAuthor: isAuthor });
+    componentDidMount () {
+        const isAuthor = window.localStorage.getItem('isAuthor');
+        const userID = window.localStorage.getItem('userID');
+        api.loadTokenLocalStorage();
+        if (userID) {
+            this.setState({ logged: true, isAuthor: Boolean(isAuthor), userID: Number(userID) });
+        }
     }
 
-    userLoggedOut = () => {
-        this.setState({ logged: false });
+    userLoggedIn = ({ isAuthor, userID }) => {
+        this.setState({ logged: true, isAuthor: isAuthor, userID: userID });
+    }
+
+    handleUserLoggedOut = () => {
+        this.setState({ logged: false, isAuthor: false, userID: null });
+        window.localStorage.removeItem('userID');
+        window.localStorage.removeItem('isAuthor');
+        window.localStorage.removeItem('token');
+        api.logout();
     }
 
     render () {
         return (
             <Router>
-                {this.state.isAuthor && <Link to='/create-post/'>New Post</Link>}
-                <br/>
-                <Link to='/authors/'>Authors</Link>
-                <br/>
-                <Link to='/'>Home</Link>
-                <br/>
-                <Link to='/login/'>log in</Link>
+                <div className='buttons has-addons is-centered'>
+                    {this.state.isAuthor && <Link className='button is-primary' to='/create-post/'>New Post</Link>}
+                    <Link className='button is-info' to='/'>Home</Link>
+                    {!this.state.logged && <Link className='button is-primary' to='/login/'>Log in</Link>}
+                    {this.state.logged && <Link className='button is-danger' onClick={this.handleUserLoggedOut} to='/'>Log out</Link>}
+                </div>
                 <Switch>
                     <Route exact path='/create-post/'><CreatePost isAuthor={this.state.isAuthor}/></Route>
                     <Route exact path='/'><HomePage/></Route>
-                    <Route exact path='/authors/'>Authors</Route>
                     <Route exact path='/login/'><Login callback={this.userLoggedIn}/></Route>
-                    <Route exact path='/posts/:postID/' render={ (routeProps) => <Post {...routeProps} logged={this.state.logged}/>}/>
+                    <Route exact path='/posts/:postID/' render={ (routeProps) => <Post {...routeProps} logged={this.state.logged} userID={this.state.userID}/>}/>
+                    <Route exact path='/edit_post/' component={CreatePost}/>
                 </Switch>
             </Router>
         );
