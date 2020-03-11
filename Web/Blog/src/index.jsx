@@ -7,9 +7,7 @@ import App from './App';
 
 ReactDOM.render(
     <div>
-        <p>
-            <h1>Hello world</h1>
-        </p>
+        <br/>
         <App/>
     </div>
     ,
