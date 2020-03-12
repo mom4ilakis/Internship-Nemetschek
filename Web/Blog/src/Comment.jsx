@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 import api from './api';
 import utils from './utils';
@@ -39,6 +40,15 @@ class Comment extends React.Component {
         this.setState({ [event.target.name]: event.target.value });
     }
 
+    handleDeleteComment = () => {
+        api.delete(`/comments/${this.props.comment.id}/`)
+            .then(() => {
+                this.props.deleteComment(this.props.comment.id);
+                this.props.history.push(this.props.location.pathname);
+            })
+            .catch(err => console.log(err));
+    }
+
     render () {
         const { comment } = this.props;
         const { id, date, author, content } = comment;
@@ -47,11 +57,13 @@ class Comment extends React.Component {
             (this.state.editing && <EditComment id={id} callback={this.toggleEdit} content={this.state.content}/>) ||
             <div className='box' key={`comment-${id}`}>
 
-                <p>
+                <p className='content'>
                     {content}
                 </p>
-                <div className='author'>{author.username}</div>
-                <div className='posted'>{`${utils.formatDate(date)} ${utils.formatTime(date)}`}</div>
+                <div className='content is-small'>
+                    <div className='author'>{author.username}</div>
+                    <div className='posted'>{`${utils.formatDate(date)} ${utils.formatTime(date)}`}</div>
+                </div>
                 <br/>
                 <div className='buttons has-addons are-small'>
                     {author.id === this.props.userID && <button onClick={this.handleDeleteComment} className='button is-danger'>Delete</button>}
@@ -71,4 +83,4 @@ Comment.propTypes = {
     logged: PropTypes.bool,
     userID: PropTypes.number
 };
-export default Comment;
+export default withRouter(Comment);
