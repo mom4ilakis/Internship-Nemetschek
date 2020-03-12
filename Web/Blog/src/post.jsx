@@ -71,14 +71,17 @@ class Post extends React.Component {
                     callback={this.toggleEditing}
                 />) ||
                     <div className='box'>
-                        <div className='content'>
+                        <div className='content is-large'>
                             <h3>{this.state.title}</h3>
                             <img src={this.state.cover}/>
                             <p>{this.state.content}</p>
-                            {utils.formatDate(this.state.date)}
-                            <br/>
-                    Time:
-                            {utils.formatTime(this.state.date)}
+                            <div className='content is-small'>
+                                {this.state.author.username}
+                                <br/>
+                                {utils.formatDate(this.state.date)}
+                                <br/>
+                                {utils.formatTime(this.state.date)}
+                            </div>
                         </div>
                         <div className='buttons has-addons are-small'>
                             {this.state.author.id === this.props.userID && <button className='button is-danger' onClick={this.handleDeletePost}>Delete</button> }
