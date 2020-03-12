@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import Comment from './Comment';
 import api from './api';
+import { withRouter } from 'react-router';
 
 class Comments extends React.Component {
     state = {
@@ -29,14 +30,22 @@ class Comments extends React.Component {
             });
     }
 
+    deleteComment = (commentID) => {
+        const newData = this.state.data.filter((comment) =>
+            comment.id !== commentID
+        );
+        this.setState({ data: newData });
+        this.props.history.push(this.props.location.pathname)
+    }
+
     render () {
         return (
             <React.Fragment>
                 {this.props.logged && <input type='text' className='input' id={`commentBox-${this.props.postID}`} />}
-                {this.props.logged && <button name='commentButton' className='button is-normal is-prim' onClick={this.handleCommentSubmit}>Comment</button>}
+                {this.props.logged && <button name='commentButton' className='button is-normal is-primary' onClick={this.handleCommentSubmit}>Comment</button>}
                 {this.state.data.map(comment =>
                     <React.Fragment key={comment.id}>
-                        <Comment comment={comment} logged={this.props.logged} userID={this.props.userID}/>
+                        <Comment comment={comment} logged={this.props.logged} userID={this.props.userID} deleteComment={this.deleteComment}/>
                         <br/>
                     </React.Fragment>
                 )}
@@ -50,4 +59,4 @@ Comments.propTypes = {
     userID: PropTypes.number
 };
 
-export default Comments;
+export default withRouter(Comments);
