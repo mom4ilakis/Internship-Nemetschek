@@ -21,14 +21,17 @@ class PostsPreview extends React.Component {
             <React.Fragment>
                 {this.state.data.map(p =>
                     <Link className='box' key={`post${p.id}`} to={`/posts/${p.id}`}>
-                        <div >
+                        <div className='content'>
                             <h2 className='title'>{p.title}</h2>
                             <br/>
                             <img src={p.cover}/>
                             <br/>
-                            {p.author.username}
-                            <br/>
-                            {utils.formatDate(p.date)}
+                            <div className='box'>
+                                <img className='image is-48x48' src={p.author.avatar}/>
+                                {p.author.username}
+                                <br/>
+                                {utils.formatDate(p.date)}
+                            </div>
                         </div>
                     </Link>
                 )}
