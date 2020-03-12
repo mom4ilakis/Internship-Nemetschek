@@ -1,19 +1,47 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Reply from './Reply';
 import utils from './utils';
+import api from './api';
 
 class Replies extends React.Component {
+    state = {
+        replies: []
+    }
+
+    componentDidMount () {
+        this.setState({ replies: this.props.replies });
+    }
+
+    handleEditReply = (newReply) => {
+
+            
+        
+    }
+
+    handleDeleteReply = (event) => {
+        api.delete(`/replies/${event.tagret.id}/`)
+            .then(() => {
+                this.props.deleteReply(event.tagret.id);
+            })
+            .catch(err => console.log(err));
+    }
+
     render () {
         return (
             <div>
                 {
                     this.props.replies.map(reply =>
-                        <div key={reply.id}>
-                            <p>{reply.content}</p>
-                            <div id='author'>{reply.author.username}</div>
-                            <div id='posted'>{`${utils.formatDate(reply.date)} ${utils.formatTime(reply.date)}`}</div>
-                        </div>
+                        <Reply
+                            key={reply.id}
+                            userID={this.props.userID}
+                            content={reply.content}
+                            author={reply.author}
+                            time={utils.formatTime(reply.date)}
+                            date={utils.formatDate(reply.date)}
+                            id={reply.id}
+                        />
                     )
                 }
             </div>
@@ -21,7 +49,9 @@ class Replies extends React.Component {
     }
 }
 Replies.propTypes = {
-    replies: PropTypes.array
+    replies: PropTypes.array,
+    deleteReply: PropTypes.func,
+    userID: PropTypes.number
 };
 
 export default Replies;
