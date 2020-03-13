@@ -2,56 +2,74 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import api from './api';
+import Error from './Error';
 import { Redirect, withRouter } from 'react-router';
+import utils from './utils';
 
 class CreatePost extends React.Component {
     state = {
         title: null,
         content: null,
-        cover: null
+        cover: null,
+        error: null
     }
 
     handleCancel = () => {
         this.props.history.push('/');
     }
 
-    handlePost = () => {
-        console.log(this.state);
-        const response = api.post('/posts/', { title: this.state.title, content: this.state.content, cover: this.state.cover });
-        response.then(({ data }) => {
-            this.props.history.push(`/posts/${data.id}`);
-        });
+    checkValidty = () => {
+        return utils.validURL(this.state.cover);
     }
 
-    handleChange = (event) => {
-        this.setState({ [event.target.id]: event.target.value });
+    handlePost = () => {
+        if (this.checkValidty()) {
+            api.post('/posts/', { title: this.state.title, content: this.state.content, cover: this.state.cover })
+                .then(({ data }) => {
+                    this.props.history.push(`/posts/${data.id}`);
+                })
+                .catch(err => {
+                    this.setState({ error: err.response.data });
+                    console.log(err);
+                });
+        }else {
+            this.setState({error: {message: 'Invalid URL'} });
+        }
+    }
+
+        handleChange = (event) => {
+            this.setState({ [event.target.id]: event.target.value });
+        }
+
+    removeError = () => {
+        this.setState({ error: null });
     }
 
     render () {
         return (
             <React.Fragment>
-                { this.props.isAuthor &&
-                    <div className='box'>
+                { this.props.isAuthor
+                    ? <div className='box'>
 
                         <label className='label'>Title</label>
-                        <input type='text' className='input' id='title' onChange={this.handleChange}/>
+                        <input type='text' required maxLength='160' className='input' id='title' onChange={this.handleChange}/>
 
                         <label className='label'>Content</label>
-                        <textarea id='content' className='input' onChange={this.handleChange}/>
+                        <textarea id='content' required maxLength='1000' className='input is-large' onChange={this.handleChange}/>
 
                         <label className='label'>Cover</label>
-                        <input type='text' className='input' id='cover' onChange={this.handleChange}/>
+                        <input type='url' required className='input' id='cover' onChange={this.handleChange}/>
 
                         <div className='buttons has-addons'>
                             <button className='button is-primary' onClick={this.handlePost}>Post</button>
                             <button className='button is-danger' onClick={this.handleCancel}>Cancel</button>
                         </div>
 
-                    </div>}
-                {!this.props.isAuthor &&
-                    <div>
+                    </div>
+                    : <div>
                         You are not an author !
                     </div>}
+                {this.state.error && <Error message={this.state.error} callback={this.removeError}/>}
             </React.Fragment>
         );
     }
@@ -59,6 +77,6 @@ class CreatePost extends React.Component {
 
 CreatePost.propTypes = {
     isAuthor: PropTypes.bool
-}
+};
 
 export default withRouter(CreatePost);
