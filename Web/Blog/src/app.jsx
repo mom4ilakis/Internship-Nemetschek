@@ -8,7 +8,6 @@ import CreatePost from './CreatePost';
 import Author from './Author';
 import api from './api';
 
-
 class App extends React.Component {
     constructor (props) {
         super(props);
