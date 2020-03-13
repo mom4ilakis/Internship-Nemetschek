@@ -1,0 +1,35 @@
+@import '~bulma';
+
+.boxed {
+    border: thin;
+}
+
+
+#root {
+    max-width: 70%;
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.comment {
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
+.reply {
+    padding: 15px;
+    margin-left: 50px;
+}
+
+.comment .author,
+.reply .author {
+    font-weight: bold;
+}
+
+.comment .posted,
+.reply .posted {
+    color: rgba(0, 0, 0, 0.9);
+    font-size: 11px;
+}
