@@ -14,20 +14,6 @@ class Replies extends React.Component {
         this.setState({ replies: this.props.replies });
     }
 
-    handleEditReply = (newReply) => {
-
-            
-        
-    }
-
-    handleDeleteReply = (event) => {
-        api.delete(`/replies/${event.tagret.id}/`)
-            .then(() => {
-                this.props.deleteReply(event.tagret.id);
-            })
-            .catch(err => console.log(err));
-    }
-
     render () {
         return (
             <div>
@@ -36,10 +22,11 @@ class Replies extends React.Component {
                         <Reply
                             key={reply.id}
                             userID={this.props.userID}
+                            removeRep={this.props.removeRep}
+                            updateRep={this.props.updateRep}
                             content={reply.content}
                             author={reply.author}
-                            time={utils.formatTime(reply.date)}
-                            date={utils.formatDate(reply.date)}
+                            date={reply.date}
                             id={reply.id}
                         />
                     )
