@@ -21,6 +21,13 @@ class Comments extends React.Component {
             .catch(err => console.log(err));
     }
 
+    updateComment = (comment) => {
+        const copyData = this.state.data;
+        const commentIndex = copyData.findIndex((c) => c.id === comment.id);
+        copyData[commentIndex] = comment;
+        this.setState({ data: copyData });
+    }
+
     handleCommentSubmit = event => {
         api.post('/comments/', { content: this.state.commentBox.value, post: this.props.postID })
             .then(({ data }) => {
@@ -45,7 +52,7 @@ class Comments extends React.Component {
                 {this.props.logged && <button name='commentButton' className='button is-normal is-primary' onClick={this.handleCommentSubmit}>Comment</button>}
                 {this.state.data.map(comment =>
                     <React.Fragment key={comment.id}>
-                        <Comment comment={comment} logged={this.props.logged} userID={this.props.userID} deleteComment={this.deleteComment}/>
+                        <Comment updateComment={this.updateComment} comment={comment} logged={this.props.logged} userID={this.props.userID} deleteComment={this.deleteComment}/>
                         <br/>
                     </React.Fragment>
                 )}
