@@ -42,7 +42,7 @@ class App extends React.Component {
     render () {
         return (
             <Router>
-                <div className='buttons has-addons is-centered'>
+                <div className='buttons is-centered'>
                     {this.state.isAuthor && <Link className='button is-primary' to='/create-post/'>New Post</Link>}
                     <Link className='button is-info' to='/'>Home</Link>
                     {!this.state.logged && <Link className='button is-primary' to='/login/'>Log in</Link>}
