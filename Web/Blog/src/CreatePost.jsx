@@ -55,10 +55,10 @@ class CreatePost extends React.Component {
                         <input type='text' required maxLength='160' className='input' id='title' onChange={this.handleChange}/>
 
                         <label className='label'>Content</label>
-                        <textarea id='content' required maxLength='1000' className='input is-large' onChange={this.handleChange}/>
+                        <textarea id='content' required maxLength='1000' rows='100' className='input' style={{height: '400px' }} onChange={this.handleChange}/>
 
                         <label className='label'>Cover</label>
-                        <input type='url' required className='input' id='cover' onChange={this.handleChange}/>
+                        <input type='url' required className='input' id='cover'  onChange={this.handleChange}/>
 
                         <div className='buttons has-addons'>
                             <button className='button is-primary' onClick={this.handlePost}>Post</button>
