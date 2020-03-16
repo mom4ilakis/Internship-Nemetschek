@@ -38,11 +38,15 @@ class Comments extends React.Component {
     }
 
     deleteComment = (commentID) => {
-        const newData = this.state.data.filter((comment) =>
+        api.delete(`/comments/${commentID}/`)
+        .then(()=> {
+            const newData = this.state.data.filter((comment) =>
             comment.id !== commentID
-        );
-        this.setState({ data: newData });
-        this.props.history.push(this.props.location.pathname)
+            );
+            this.setState({ data: newData });
+            this.props.history.push(this.props.location.pathname)
+        })
+        .catch(err => console.log(err));
     }
 
     render () {
