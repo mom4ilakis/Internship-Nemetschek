@@ -8,7 +8,7 @@ class Error extends React.Component {
 
     render () {
         return (
-            <div className='notification' onClick={this.props.callback}>{this.getInfo()}</div>
+            <div className='notification is-danger' onClick={this.props.callback}>{this.getInfo()}</div>
         );
     }
 }
