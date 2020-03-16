@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import api from './api';
+import SDC from './SDC';
 
 class EditPost extends React.Component {
     state = {
@@ -54,11 +55,10 @@ class EditPost extends React.Component {
                 <label className='label'>New Cover</label>
                 <input id='cover' type='text' className='input' onChange={this.handleChange}/>
 
-                <div className='buttons has-addons'>
-                    <button className='button is-primary' onClick={this.handleSubmit}>Submit</button>
-                    <button className='button is-info' onClick={this.handleCancel}>Cancel</button>
-                    <button className='button is-danger' onClick={this.handleDelete}>Delete Post</button>
-                </div>
+               <SDC
+                handleCancel={this.callback}
+                handleSubmit={this.handleSubmit}
+                handleDelete={this.handleDelete}/>
 
             </div>
         );
