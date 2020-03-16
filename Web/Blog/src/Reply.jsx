@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 
 import api from './api';
 import utils from './utils';
+import Edit from './Edit';
+
 class Reply extends React.Component {
     state = {
         content: null,
@@ -26,11 +28,11 @@ class Reply extends React.Component {
             .catch(err => console.log(err));
     }
 
-    handleSubmit = () => {
-        api.patch(`/replies/${this.props.id}/`, { content: this.state.content })
+    handleSubmit = (content) => {
+        api.patch(`/replies/${this.props.id}/`, { content: content})
             .then(() => {
                 const newReply = {
-                    content: this.state.content,
+                    content: content,
                     author: this.props.author,
                     date: this.props.date,
                     id: this.props.id
@@ -47,14 +49,12 @@ class Reply extends React.Component {
 
     editView = () => {
         return (
-            <div className='box'>
-                <label className='label'>New reply</label>
-                <input id='content' className='input' onChange={this.handleTyping}/>
-                <div className='buttons are-centered'>
-                    <button className='button is-primary' onClick={this.handleSubmit}>Submit</button>
-                    <button className='button is-info' onClick={this.handleCancel}>Cancel</button>
-                </div>
-            </div>
+            <Edit 
+            name='reply'
+            content={this.props.content}
+            callbackOnSuccess={this.handleSubmit}
+            callbackOnDelete={this.handleDelete}
+            callbackOnCancel={this.handleEdit}/>
         );
     }
 
@@ -70,9 +70,8 @@ class Reply extends React.Component {
                     {utils.formatDate(this.props.date)}
                 </div>
                 {(this.props.author.id === this.props.userID) &&
-                <div className='buttons are-centered'>
-                    <button className='button is-primary' onClick={this.handleEdit}>Edit</button>
-                    <button className='button is-danger' onClick={this.handleDelete}>Delete</button>
+                <div className='buttons are-centered are-small'>
+                    <button className='button is-dark' onClick={this.handleEdit}>Edit</button>
                 </div>}
             </div>
         );
