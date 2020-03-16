@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import api from './api';
+import SDC from './SDC';
 
 class EditComment extends React.Component {
     state = {
@@ -10,7 +11,7 @@ class EditComment extends React.Component {
 
     componentDidMount () {
         this.setState({ content: this.props.content });
-        document.getElementById('content').value = this.props.content;
+        document.getElementById('newComment').value = this.props.content;
     }
 
     handleChange = (event) => {
@@ -20,29 +21,24 @@ class EditComment extends React.Component {
     handleSubmit = () => {
         api.patch(`/comments/${this.props.id}/`, { content: this.state.content })
             .then(() => {
-                this.props.callback(this.state.content);
+                this.props.callbackOnSubmit(this.state.content);
             })
             .catch(err => console.log(err));
     }
 
-    handleDelete = () => {
-        api.delete(`/comments/${this.props.id}/`)
-            .then(() => {
-                this.props.callback();
-            })
-            .catch(err => console.log(err));
+    handleDelete = () => {  
+        this.props.callbackOnDelete(this.props.id);
     }
 
     render () {
         return (
             <div className='box'>
                 <label className='label'>New comment</label>
-                <input id='content' type='text' className='input' onChange={this.handleChange}/>
-                <div className='buttons'>
-                    <button className='button is-primary' onClick={this.handleSubmit}>Save</button>
-                    <button className='button is-info' onClick={this.props.callback}>Cancel</button>
-                    <button className='button is-danger' onClick={this.handleDelete}>Delete</button>
-                </div>
+                <input id='newComment' type='text' className='input' onChange={this.handleChange}/>
+                <SDC
+                handleDelete={this.handleDelete}
+                handleSubmit={this.handleSubmit}
+                handleCancel={this.props.callbackCancel}/>
             </div>
         );
     }
