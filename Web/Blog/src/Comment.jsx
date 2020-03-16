@@ -15,11 +15,16 @@ class Comment extends React.Component {
         replies: []
     }
 
-    toggleEdit = (newContent) => {
+    toggleEdit = () => {
         this.setState({ editing: !this.state.editing });
+        
+    }
+
+    handleUpdate = (newContent) => {
         if (!newContent) {
             this.setState({ content: newContent });
             this.props.updateComment(this.props.comment.id);
+            this.toggleEdit();
         }
     }
 
@@ -53,42 +58,29 @@ class Comment extends React.Component {
         this.setState({ [event.target.name]: event.target.value });
     }
 
-    handleDeleteComment = () => {
-        api.delete(`/comments/${this.props.comment.id}/`)
-            .then(() => {
-                this.props.deleteComment(this.props.comment.id);
-                this.props.history.push(this.props.location.pathname);
-            })
-            .catch(err => console.log(err));
-    }
-
     render () {
         const { comment } = this.props;
         const { id, date, author, content } = comment;
 
         return (
             this.state.editing
-                ? <EditComment id={id} callback={this.toggleEdit} content={this.state.content}/>
+                ? <EditComment 
+                    id={id} 
+                    callbackOnCancel={this.toggleEdit} 
+                    callbackOnSubmit={this.handleUpdate} 
+                    callbackOnDelete={this.props.deleteComment} 
+                    content={content}/>
                 : <div className='box' key={`comment-${id}`}>
 
-                    <p className='content'>
+                    <div className='content'>
                         {content}
-                    </p>
+                    </div>
                     <div className='content is-small'>
                         <div className='author'>{author.username}</div>
                         <div className='posted'>{`${utils.formatDate(date)} ${utils.formatTime(date)}`}</div>
                     </div>
                     <br/>
                     <div className='buttons has-addons are-small'>
-                        {
-                            author.id === this.props.userID &&
-                            <button
-                                onClick={this.handleDeleteComment}
-                                className='button is-danger'
-                            >
-                                Delete
-                            </button>
-                        }
                         {author.id === this.props.userID && <button onClick={this.toggleEdit} className='button is-dark'>Edit</button>}
                     </div>
 
