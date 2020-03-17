@@ -21,9 +21,11 @@ class Comment extends React.Component {
     }
 
     handleUpdate = (newContent) => {
-        if (!newContent) {
+        if (newContent) {
             this.setState({ content: newContent });
-            this.props.updateComment(this.props.comment.id);
+            const newComment = this.props.comment;
+            newComment.content = newContent;
+            this.props.updateComment(newComment);
             this.toggleEdit();
         }
     }
