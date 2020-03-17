@@ -15,7 +15,7 @@ class EditComment extends React.Component {
     }
 
     handleChange = (event) => {
-        this.setState({ [event.target.id]: event.target.value });
+        this.setState({ content: event.target.value });
     }
 
     handleSubmit = () => {
@@ -36,9 +36,9 @@ class EditComment extends React.Component {
                 <label className='label'>New comment</label>
                 <input id='newComment' type='text' className='input' onChange={this.handleChange}/>
                 <SDC
-                handleDelete={this.handleDelete}
-                handleSubmit={this.handleSubmit}
-                handleCancel={this.props.callbackCancel}/>
+                    handleDelete={this.handleDelete}
+                    handleSubmit={this.handleSubmit}
+                    handleCancel={this.props.callbackOnCancel}/>
             </div>
         );
     }
