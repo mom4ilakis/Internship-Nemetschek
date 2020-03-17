@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 
 import api from './api';
+import DisplayText from './DisplayText';
 
 class Author extends React.Component {
     constructor (props) {
@@ -40,15 +41,11 @@ class Author extends React.Component {
         this.setState({ editing: !this.state.editing });
     }
 
-    handleSubmit = () => {
+    handleSubmit = (data) => {
         api.patch(`/authors/${this.props.authorID}/`,
-            {
-                avatar: this.state.avatar,
-                first_name: this.state.first_name,
-                last_name: this.state.last_name,
-                email: this.state.email
-            }).then(() => {
-            this.toggleEdinting();
+                data
+                ).then(() => {
+            this.setState(data);
         }).catch(err => console.log(err));
     }
 
@@ -59,7 +56,7 @@ class Author extends React.Component {
     editAuthor = () => {
         return (
             <React.Fragment>
-                <div className='box'>
+                {/* <div className='box'>
                     <label className='label'>New avatar</label>
                     <input id='avatar' type='text' className='input' onChange={this.handleChange}/>
 
@@ -76,7 +73,7 @@ class Author extends React.Component {
                         <button className='button is-primary' onClick={this.handleSubmit}>Submit</button>
                         <button className='button is-info' onClick={this.handleSubmit}>Cancel</button>
                     </div>
-                </div>
+                </div> */}
             </React.Fragment>
         );
     }
@@ -85,20 +82,11 @@ class Author extends React.Component {
         return (
             <React.Fragment>
                 <div className='box'>
-                    <div className='content'>
-                        <img className='image is-128x128' src={this.state.avatar}/>
-                        <label className='label is-small'>Username:</label>
-                        <div id='username' className='box'>{this.state.username}</div>
-                        <label className='label is-small'>Email:</label>
-                        <div id='email' className='box'>{this.state.email}</div>
-                        <label className='label is-small'>First name:</label>
-                        <div id='first_name' className='box'>{this.state.first_name}</div>
-                        <label className='label is-small'>Last name:</label>
-                        <div id='last_name' className='box'>{this.state.last_name}</div>
-                    </div>
-                    <div className='buttons has-addons is-centered'>
-                        <button className="button is-primary" onClick={this.toggleEdinting}>Edit</button>
-                    </div>
+                    <img className='image is-128x128' src={this.state.avatar}/>
+                    <DisplayText type='username' name='username' text={this.state.username} callbackOnSuccess={this.handleSubmit}/>
+                    <DisplayText type='eamil' name='email' text={this.state.email} callbackOnSuccess={this.handleSubmit}/>
+                    <DisplayText type='first_name' name='first name' text={this.state.first_name} callbackOnSuccess={this.handleSubmit}/>
+                    <DisplayText type='last_name' name='last name' text={this.state.last_name} callbackOnSuccess={this.handleSubmit}/>
                 </div>
             </React.Fragment>
         );
@@ -106,7 +94,7 @@ class Author extends React.Component {
 
     render () {
         return (
-            (this.state.editing && this.editAuthor()) || this.display()
+            this.display()
         );
     }
 }
