@@ -6,6 +6,7 @@ import Comments from './Comments';
 import api from './api';
 import utils from './utils';
 import EditPost from './EditPost';
+import { AuthorContext } from './AuthorContext';
 
 class Post extends React.Component {
     state = {
@@ -52,7 +53,9 @@ class Post extends React.Component {
     }
 
     toggleEditing = (newData) => {
-        this.loadData(newData);
+        if (newData) {
+            this.loadData(newData);
+        }
         this.setState({ editable: !this.state.editable });
     }
 
@@ -63,13 +66,13 @@ class Post extends React.Component {
     render () {
         return (
             <React.Fragment>
-                {(this.state.editable &&
+                {this.state.editable?
                 <EditPost
                     title={this.state.title}
                     content={this.state.content}
                     cover={this.state.cover}
                     callback={this.toggleEditing}
-                />) ||
+                />:
                     <div className='box'>
                         <div className='content is-large'>
                             <h3>{this.state.title}</h3>
@@ -84,7 +87,7 @@ class Post extends React.Component {
                             </div>
                         </div>
                         <div className='buttons has-addons are-small'>
-                            {this.state.author.id === this.props.userID && <button className='button is-dark' to='/edit_post/' onClick={this.handleClick}>Edit</button>}
+                            {this.state.author.id === this.context.userID && <button className='button is-dark' to='/edit_post/' onClick={this.handleClick}>Edit</button>}
                         </div>
                         <Comments postID={this.props.match.params.postID} logged={this.props.logged} userID={this.props.userID}/>
                         <br/>
@@ -95,6 +98,8 @@ class Post extends React.Component {
         );
     }
 };
+
+Post.contextType = AuthorContext;
 
 Post.propTypes = {
     match: PropTypes.object,
