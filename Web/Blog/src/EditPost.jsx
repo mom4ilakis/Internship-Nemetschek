@@ -56,7 +56,7 @@ class EditPost extends React.Component {
                 <input id='cover' type='text' className='input' onChange={this.handleChange}/>
 
                <SDC
-                handleCancel={this.callback}
+                handleCancel={this.handleCancel}
                 handleSubmit={this.handleSubmit}
                 handleDelete={this.handleDelete}/>
 
