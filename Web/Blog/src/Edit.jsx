@@ -17,6 +17,7 @@ class Edit extends React.Component {
     }
 
     handleSubmit = (event) => {
+        console.log(this.state.content);
         this.props.callbackOnSuccess(this.state.content);
     }
 
@@ -34,9 +35,9 @@ class Edit extends React.Component {
                 <label className='label'>{this.props.name}</label>
                 <input id='content'className='input' type='text' maxLength='160' onChange={this.handleTyping}/>
                <SDC 
-                    handleSubmit={this.handleSubmit}
-                    handleCancel={this.handleCancel}
-                    handleDelete={this.handleDelete}/>
+                    handleSubmit={ this.props.callbackOnSuccess && this.handleSubmit}
+                    handleCancel={this.props.callbackOnCancel && this.handleCancel}
+                    handleDelete={this.props.handleDelete && this.handleDelete}/>
             </React.Fragment>
         );
     }
