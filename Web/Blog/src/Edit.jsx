@@ -17,7 +17,6 @@ class Edit extends React.Component {
     }
 
     handleSubmit = (event) => {
-        console.log(this.state.content);
         this.props.callbackOnSuccess(this.state.content);
     }
 
