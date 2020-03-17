@@ -7,6 +7,8 @@ import Login from './Login';
 import CreatePost from './CreatePost';
 import Author from './Author';
 import api from './api';
+import{ AuthorContext } from './AuthorContext';
+
 
 class App extends React.Component {
     constructor (props) {
@@ -30,7 +32,7 @@ class App extends React.Component {
     userLoggedIn = ({ isAuthor, userID }) => {
         this.setState({ logged: true, isAuthor: isAuthor, userID: userID });
     }
-
+    
     handleUserLoggedOut = () => {
         this.setState({ logged: false, isAuthor: false, userID: null });
         window.localStorage.removeItem('userID');
@@ -38,7 +40,7 @@ class App extends React.Component {
         window.localStorage.removeItem('token');
         api.logout();
     }
-
+    
     render () {
         return (
             <Router>
@@ -50,14 +52,17 @@ class App extends React.Component {
                     {this.state.logged && <Link className='button is-danger' onClick={this.handleUserLoggedOut} to='/'>Log out</Link>}
 
                 </div>
-                <Switch>
-                    <Route exact path='/'><HomePage/></Route>
-                    <Route exact path='/author/' render={ (routeProps) => <Author {...routeProps} authorID={this.state.userID}/>}/>
-                    <Route exact path='/create-post/'><CreatePost isAuthor={this.state.isAuthor}/></Route>
-                    <Route exact path='/login/'><Login callback={this.userLoggedIn}/></Route>
-                    <Route exact path='/posts/:postID/' render={ (routeProps) => <Post {...routeProps} logged={this.state.logged} userID={this.state.userID}/>}/>
-                    <Route exact path='/edit_post/' component={CreatePost}/>
-                </Switch>
+                <AuthorContext.Provider value= {this.state}>
+                    <Switch>
+                        <Route exact path='/'><HomePage/></Route>
+                        <Route exact path='/author/' render={ (routeProps) => <Author {...routeProps} authorID={this.state.userID}/>}/>
+                        <Route exact path='/create-post/'><CreatePost isAuthor={this.state.isAuthor}/></Route>
+                        <Route exact path='/login/'><Login callback={this.userLoggedIn}/></Route>
+                        <Route exact path='/posts/:postID/' render={ (routeProps) => <Post {...routeProps} logged={this.state.logged} userID={this.state.userID}/>}/>
+                        <Route exact path='/edit_post/' component={CreatePost}/>
+                    </Switch>
+                </AuthorContext.Provider>
+
             </Router>
         );
     }
