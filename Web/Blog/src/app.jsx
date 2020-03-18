@@ -26,11 +26,14 @@ class App extends React.Component {
         api.loadTokenLocalStorage();
         if (userID) {
             this.setState({ logged: true, isAuthor: Boolean(isAuthor), userID: Number(userID) });
+            this.context={ logged: true, isAuthor: Boolean(isAuthor), userID: Number(userID) };
         }
     }
 
     userLoggedIn = ({ isAuthor, userID }) => {
         this.setState({ logged: true, isAuthor: isAuthor, userID: userID });
+        this.contex={ logged: true, isAuthor: Boolean(isAuthor), userID: Number(userID) };
+
     }
     
     handleUserLoggedOut = () => {
