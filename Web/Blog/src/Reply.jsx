@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import api from './api';
 import utils from './utils';
 import Edit from './Edit';
+import AuthorDisplay from './AuthorDisplay';
+import { AuthorContext } from './AuthorContext';
 
 class Reply extends React.Component {
     state = {
@@ -63,13 +65,12 @@ class Reply extends React.Component {
             <div>
                 <p className='content is-medium'>{this.props.content}</p>
                 <div className='content is-small'>
-                    {this.props.author.username}
-                    <br/>
+                    <AuthorDisplay username={this.props.author.username} avatar={this.props.author.avatar}/>
                     {utils.formatTime(this.props.date)}
                     <br/>
                     {utils.formatDate(this.props.date)}
                 </div>
-                {(this.props.author.id === this.props.userID) &&
+                {(this.props.author.id === this.context.userID) &&
                 <div className='buttons are-centered are-small'>
                     <button className='button is-dark' onClick={this.handleEdit}>Edit</button>
                 </div>}
@@ -83,6 +84,8 @@ class Reply extends React.Component {
         );
     }
 }
+
+Reply.contextType = AuthorContext;
 
 Reply.propTypes = {
     userID: PropTypes.number,
