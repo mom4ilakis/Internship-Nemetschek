@@ -7,6 +7,7 @@ import api from './api';
 import utils from './utils';
 import EditPost from './EditPost';
 import { AuthorContext } from './AuthorContext';
+import AuthorDisplay from './AuthorDisplay';
 
 class Post extends React.Component {
     state = {
@@ -19,7 +20,6 @@ class Post extends React.Component {
 
     loadData = (passedData) => {
         const postID = this.props.match.params.postID;
-        console.log(`passed data is ${passedData}`);
         if (!passedData) {
             api.get(`/posts/${postID}/`)
                 .then(({ data }) => {
@@ -79,7 +79,9 @@ class Post extends React.Component {
                             <img src={this.state.cover}/>
                             <p>{this.state.content}</p>
                             <div className='content is-small'>
-                                {this.state.author.username}
+                                <AuthorDisplay
+                                    username={this.state.author.username}
+                                    avatar={this.state.author.avatar}/>
                                 <br/>
                                 {utils.formatDate(this.state.date)}
                                 <br/>
