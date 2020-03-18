@@ -2,6 +2,7 @@ import React from 'react';
 import api from './api';
 import utils from './utils';
 import { Link } from 'react-router-dom';
+import AuthorDisplay from './AuthorDisplay';
 
 class PostsPreview extends React.Component {
     state = {
@@ -26,12 +27,10 @@ class PostsPreview extends React.Component {
                             <br/>
                             <img src={p.cover}/>
                             <br/>
-                            <div className='box'>
-                                <img className='image is-48x48' src={p.author.avatar}/>
-                                {p.author.username}
-                                <br/>
-                                {utils.formatDate(p.date)}
-                            </div>
+                            <AuthorDisplay
+                                username={p.author.username}
+                                avatar={p.author.avatar}/>
+                            {utils.formatDate(p.date)}
                         </div>
                     </Link>
                 )}
