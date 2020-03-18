@@ -22,7 +22,6 @@ class DisplayText extends React.Component {
 
     setValue = (newText) => {
         if (newText) {
-            console.log(`This is the text ${newText}`);
             this.toggleEdit();
             this.props.callbackOnSuccess({[this.props.type]: newText});
         }
