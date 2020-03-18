@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Comment from './Comment';
 import api from './api';
 import { withRouter } from 'react-router';
+import { AuthorContext } from './AuthorContext';
 
 class Comments extends React.Component {
     state = {
@@ -52,11 +53,11 @@ class Comments extends React.Component {
     render () {
         return (
             <React.Fragment>
-                {this.props.logged && <input type='text' className='input' id={`commentBox-${this.props.postID}`} />}
-                {this.props.logged && <button name='commentButton' className='button is-normal is-primary' onClick={this.handleCommentSubmit}>Comment</button>}
+                {this.context.logged && <input type='text' className='input' id={`commentBox-${this.props.postID}`} />}
+                {this.context.logged && <button name='commentButton' className='button is-normal is-primary' onClick={this.handleCommentSubmit}>Comment</button>}
                 {this.state.data.map(comment =>
                     <React.Fragment key={comment.id}>
-                        <Comment updateComment={this.updateComment} comment={comment} logged={this.props.logged} userID={this.props.userID} deleteComment={this.deleteComment}/>
+                        <Comment updateComment={this.updateComment} comment={comment} deleteComment={this.deleteComment}/>
                         <br/>
                     </React.Fragment>
                 )}
@@ -64,6 +65,9 @@ class Comments extends React.Component {
         );
     }
 }
+
+Comments.contextType = AuthorContext
+
 Comments.propTypes = {
     postID: PropTypes.string,
     logged: PropTypes.bool,
