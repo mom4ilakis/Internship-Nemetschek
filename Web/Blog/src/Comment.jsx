@@ -6,6 +6,8 @@ import api from './api';
 import utils from './utils';
 import Replies from './Replies';
 import EditComment from './EditComment';
+import AuthorDisplay from './AuthorDisplay';
+import { AuthorContext } from './AuthorContext';
 
 class Comment extends React.Component {
     state = {
@@ -43,7 +45,7 @@ class Comment extends React.Component {
                 this.setState({ replies: newReplies, content: null });
             });
     }
-
+    
     updateReply = (newReply) => {
         const oldReplyIndx = this.state.replies.findIndex((reply) => reply.id === newReply.id);
         const updatedReplies = this.state.replies;
@@ -63,37 +65,41 @@ class Comment extends React.Component {
     render () {
         const { comment } = this.props;
         const { id, date, author, content } = comment;
-
         return (
-            this.state.editing
+                this.state.editing
                 ? <EditComment 
-                    id={id} 
-                    callbackOnCancel={this.toggleEdit} 
-                    callbackOnSubmit={this.handleUpdate} 
-                    callbackOnDelete={this.props.deleteComment} 
-                    content={content}/>
+                id={id} 
+                callbackOnCancel={this.toggleEdit} 
+                callbackOnSubmit={this.handleUpdate} 
+                callbackOnDelete={this.props.deleteComment} 
+                content={content}/>
                 : <div className='box' key={`comment-${id}`}>
 
                     <div className='content'>
                         {content}
                     </div>
                     <div className='content is-small'>
-                        <div className='author'>{author.username}</div>
+                        <AuthorDisplay
+                            username={author.username}
+                            avatar={author.avatar}/>
                         <div className='posted'>{`${utils.formatDate(date)} ${utils.formatTime(date)}`}</div>
                     </div>
                     <br/>
                     <div className='buttons has-addons are-small'>
-                        {author.id === this.props.userID && <button onClick={this.toggleEdit} className='button is-dark'>Edit</button>}
+                        {author.id === this.context.userID && <button onClick={this.toggleEdit} className='button is-dark'>Edit</button>}
                     </div>
 
-                    {this.props.logged &&
+                    {this.context.logged &&
                     <input type='text' className='input' id={`replyBox-${comment.id}`} name='content' onChange={ this.handleTyping }/>}
-                    {this.props.logged && <button className='button is-normal is-primary' onClick={this.handleMakeReply}>Reply</button>}
+                    {this.context.logged && <button className='button is-normal is-primary' onClick={this.handleMakeReply}>Reply</button>}
                     <br/>
                     <Replies updateRep={this.updateReply} removeRep={this.removeReply} replies={this.state.replies} userID={this.props.userID}/>
-                  </div>);
+                  </div>
+        );
     }
 }
+
+Comment.contextType = AuthorContext;
 
 Comment.propTypes = {
     comment: PropTypes.object,
@@ -102,4 +108,4 @@ Comment.propTypes = {
     deleteComment: PropTypes.func,
     history: PropTypes.object
 };
-export default withRouter(Comment);
+export default Comment;
