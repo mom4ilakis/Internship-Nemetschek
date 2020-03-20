@@ -1,22 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 
-class SDC extends React.Component {
-    render () {
-        return (
-            <div className='buttons are-small has-addons is-centered'>
-                {this.props.handleSubmit && <button className='button is-primary' onClick={this.props.handleSubmit}>Submit</button>}
-                {this.props.handleCancel && <button className='button is-info' onClick={this.props.handleCancel}>Cancel</button>}
-                {this.props.handleDelete && <button className='button is-danger' onClick={this.props.handleDelete}>Delete</button>}
-            </div>
-        );
-    }
+
+function SDC(props) {
+  return (
+    <div className="buttons are-small has-addons is-centered">
+      {props.handleSubmit && <button className="button is-primary" onClick={props.handleSubmit}>Submit</button>}
+      {props.handleCancel && <button className="button is-info" onClick={props.handleCancel}>Cancel</button>}
+      {props.handleDelete && <button className="button is-danger" onClick={props.handleDelete}>Delete</button>}
+    </div>
+  );
 }
 
 SDC.propTypes = {
-    handleCancel: PropTypes.func,
-    handleDelete: PropTypes.func,
-    handleSubmit: PropTypes.func
+  handleCancel: PropTypes.func,
+  handleDelete: PropTypes.func,
+  handleSubmit: PropTypes.func,
 
 }
 
