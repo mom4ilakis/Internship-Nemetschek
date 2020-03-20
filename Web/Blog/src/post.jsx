@@ -77,7 +77,7 @@ class Post extends React.Component {
                         <div className='content is-large'>
                             <h3>{this.state.title}</h3>
                             <img src={this.state.cover}/>
-                            <p>{this.state.content}</p>
+                            <div>{this.state.content}</div>
                             <div className='content is-small'>
                                 <AuthorDisplay
                                     username={this.state.author.username}
