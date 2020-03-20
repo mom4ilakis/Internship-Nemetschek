@@ -1,6 +1,5 @@
 import React from 'react';
 
-import Error from './Error';
 import SDC from './SDC'
 
 class Edit extends React.Component {
