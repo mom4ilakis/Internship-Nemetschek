@@ -53,31 +53,6 @@ class Author extends React.Component {
         this.toggleEdinting();
     }
 
-    editAuthor = () => {
-        return (
-            <React.Fragment>
-                {/* <div className='box'>
-                    <label className='label'>New avatar</label>
-                    <input id='avatar' type='text' className='input' onChange={this.handleChange}/>
-
-                    <label className='label'>New mail</label>
-                    <input id='email' type='text' className='input' onChange={this.handleChange}/>
-
-                    <label className='label'>New first name</label>
-                    <input id='first_name' type='text' className='input' onChange={this.handleChange}/>
-
-                    <label className='label'>New last name</label>
-                    <input id='last_name' type='text' className='input' onChange={this.handleChange}/>
-
-                    <div className='buttons is-centered'>
-                        <button className='button is-primary' onClick={this.handleSubmit}>Submit</button>
-                        <button className='button is-info' onClick={this.handleSubmit}>Cancel</button>
-                    </div>
-                </div> */}
-            </React.Fragment>
-        );
-    }
-
     display = () => {
         return (
             <React.Fragment>
