@@ -10,11 +10,15 @@ import AuthorDisplay from './AuthorDisplay';
 import { AuthorContext } from './AuthorContext';
 
 class Comment extends React.Component {
-    state = {
-        content: null,
-        editing: false,
-        replyBox: null,
-        replies: []
+    constructor(props) {
+        super(props)
+        this.state = {
+            content: null,
+            editing: false,
+            replies: []
+        }   
+        this.replyBox = React.createRef()
+
     }
 
     toggleEdit = () => {
@@ -33,15 +37,14 @@ class Comment extends React.Component {
     }
 
     componentDidMount () {
-        const replyBox = document.getElementById(`replyBox-${this.props.comment.id}`);
-        this.setState({ replies: this.props.comment.replies, replyBox: replyBox });
+        this.setState({ replies: this.props.comment.replies});
     }
 
     handleMakeReply = (event) => {
         api.post('/replies/', { content: this.state.content, comment: this.props.comment.id })
             .then(response => {
                 const newReplies = [...this.state.replies, response.data];
-                this.state.replyBox.value = '';
+                this.replyBox.current.value = '';
                 this.setState({ replies: newReplies, content: null });
             });
     }
@@ -92,12 +95,12 @@ class Comment extends React.Component {
                             </div>}
                     {this.context.logged && 
                     <div>
-                        <input type='text' className='input' id={`replyBox-${comment.id}`} name='content' onChange={ this.handleTyping }/>
+                        <input type='text' className='input' ref={this.replyBox} name='content' onChange={ this.handleTyping }/>
                         <button className='button is-normal is-primary' onClick={this.handleMakeReply}>Reply</button>
                     </div>
                     }
                     <div className='box is-shadowless'>
-                        <Replies updateRep={this.updateReply} removeRep={this.removeReply} replies={this.state.replies} userID={this.props.userID}/>
+                        <Replies updateRep={this.updateReply} removeRep={this.removeReply} replies={this.state.replies}/>
                     </div>
                   </div>
         );
