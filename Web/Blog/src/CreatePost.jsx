@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import api from './api';
 import Error from './Error';
-import { Redirect, withRouter } from 'react-router';
+import { withRouter } from 'react-router';
 import utils from './utils';
 
 class CreatePost extends React.Component {
