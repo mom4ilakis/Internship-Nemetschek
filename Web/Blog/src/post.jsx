@@ -91,7 +91,7 @@ class Post extends React.Component {
                         <div className='buttons has-addons are-small'>
                             {this.state.author.id === this.context.userID && <button className='button is-dark' to='/edit_post/' onClick={this.handleClick}>Edit</button>}
                         </div>
-                        <Comments postID={this.props.match.params.postID} logged={this.props.logged} userID={this.props.userID}/>
+                        <Comments postID={this.props.match.params.postID} />
                         <br/>
                     </div>
                 }
