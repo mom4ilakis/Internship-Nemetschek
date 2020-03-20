@@ -23,7 +23,7 @@ class PostsPreview extends React.Component {
                 {this.state.data.map(p =>
                     <Link className='box' key={`post${p.id}`} to={`/posts/${p.id}`}>
                         <div className='content'>
-                            <h2 className='title'>{p.title}</h2>
+                            <h1 className='title'>{p.title}</h1>
                             <br/>
                             <img src={p.cover}/>
                             <br/>
