@@ -7,17 +7,19 @@ import { withRouter } from 'react-router';
 import { AuthorContext } from './AuthorContext';
 
 class Comments extends React.Component {
-    state = {
-        data: [],
-        commentBox: null
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: [],
+        }
+        this.commentBox = React.createRef();
     }
 
     componentDidMount () {
         const postID = this.props.postID;
         api.get(`/comments_on_post/${postID}/`)
             .then(({ data }) => {
-                const commentBox = document.getElementById(`commentBox-${postID}`);
-                this.setState({ data: data, commentBox: commentBox });
+                this.setState({ data: data });
             })
             .catch(err => console.log(err));
     }
@@ -30,11 +32,11 @@ class Comments extends React.Component {
     }
 
     handleCommentSubmit = event => {
-        api.post('/comments/', { content: this.state.commentBox.value, post: this.props.postID })
+        api.post('/comments/', { content: this.commentBox.current.value, post: this.props.postID })
             .then(({ data }) => {
                 const newData = [...this.state.data, data];
                 this.setState({ data: newData });
-                this.state.commentBox.value = '';
+                this.commentBox.current.value = '';
             });
     }
 
@@ -53,7 +55,7 @@ class Comments extends React.Component {
     render () {
         return (
             <React.Fragment>
-                {this.context.logged && <input type='text' className='input' id={`commentBox-${this.props.postID}`} />}
+                {this.context.logged && <input type='text' className='input' ref={this.commentBox} />}
                 {this.context.logged && <button name='commentButton' className='button is-normal is-primary' onClick={this.handleCommentSubmit}>Comment</button>}
                 {this.state.data.map(comment =>
                     <React.Fragment key={comment.id}>
