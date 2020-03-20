@@ -1,18 +1,20 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-
-class AuthorDisplay extends React.Component {
-
-    render () {
-        return (
-            <div className='media'>
-                <div className='media-left'>
-                    <img className='image is-rounded is-32x32' src={this.props.avatar}/>
-                </div>
-                   <b>{this.props.username}</b>
-            </div>
-        );
-    }
+function AuthorDisplay(props) {
+  return (
+    <div className="media">
+      <div className="media-left">
+        <img className="image is-rounded is-32x32" alt="avatar" src={props.avatar} />
+      </div>
+      <b>{props.username}</b>
+    </div>
+  );
 }
+
+AuthorDisplay.propTypes = {
+  avatar: PropTypes.string,
+  username: PropTypes.string,
+};
 
 export default AuthorDisplay;
