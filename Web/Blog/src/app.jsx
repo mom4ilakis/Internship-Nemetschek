@@ -62,7 +62,7 @@ class App extends React.Component {
                         <Route exact path='/author/' render={ (routeProps) => <Author {...routeProps} authorID={this.state.userID}/>}/>
                         <Route exact path='/create-post/'><CreatePost isAuthor={this.state.isAuthor}/></Route>
                         <Route exact path='/login/'><Login callback={this.userLoggedIn}/></Route>
-                        <Route exact path='/posts/:postID/' render={ (routeProps) => <Post {...routeProps} logged={this.state.logged} userID={this.state.userID}/>}/>
+                        <Route exact path='/posts/:postID/' render={ (routeProps) => <Post {...routeProps} />}/>
                         <Route exact path='/edit_post/' component={CreatePost}/>
                     </Switch>
                 </AuthorContext.Provider>
