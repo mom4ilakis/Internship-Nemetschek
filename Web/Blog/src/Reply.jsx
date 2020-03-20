@@ -63,17 +63,17 @@ class Reply extends React.Component {
     display = () => {
         return (
             <div>
-                <p className='content is-medium'>{this.props.content}</p>
-                <div className='content is-small'>
+                <div className='content is-small'> 
                     <AuthorDisplay username={this.props.author.username} avatar={this.props.author.avatar}/>
-                    {utils.formatTime(this.props.date)}
-                    <br/>
-                    {utils.formatDate(this.props.date)}
                 </div>
+                <div className='content is-medium'>{this.props.content}</div>
                 {(this.props.author.id === this.context.userID) &&
-                <div className='buttons are-centered are-small'>
-                    <button className='button is-dark' onClick={this.handleEdit}>Edit</button>
-                </div>}
+                    <button className='button is-dark is-small' onClick={this.handleEdit}>Edit</button>      
+                }
+                <div className='content is-small'>
+                    <div className='posted'>{`${utils.formatDate(this.props.date)} ${utils.formatTime(this.props.date)}`}</div>
+                </div>
+                <br/>
             </div>
         );
     }
