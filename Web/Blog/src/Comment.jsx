@@ -75,7 +75,7 @@ class Comment extends React.Component {
                 content={content}/>
                 : <div className='box' key={`comment-${id}`}>
 
-                    <div className='content'>
+                    <div className='content is-medium'>
                         {content}
                     </div>
                     <div className='content is-small'>
@@ -84,16 +84,21 @@ class Comment extends React.Component {
                             avatar={author.avatar}/>
                         <div className='posted'>{`${utils.formatDate(date)} ${utils.formatTime(date)}`}</div>
                     </div>
-                    <br/>
-                    <div className='buttons has-addons are-small'>
-                        {author.id === this.context.userID && <button onClick={this.toggleEdit} className='button is-dark'>Edit</button>}
+                        {author.id === this.context.userID && 
+                            <div>
+                                <button onClick={this.toggleEdit} className='button is-dark is-small'>Edit</button>
+                                <br/>
+                                <br/>
+                            </div>}
+                    {this.context.logged && 
+                    <div>
+                        <input type='text' className='input' id={`replyBox-${comment.id}`} name='content' onChange={ this.handleTyping }/>
+                        <button className='button is-normal is-primary' onClick={this.handleMakeReply}>Reply</button>
                     </div>
-
-                    {this.context.logged &&
-                    <input type='text' className='input' id={`replyBox-${comment.id}`} name='content' onChange={ this.handleTyping }/>}
-                    {this.context.logged && <button className='button is-normal is-primary' onClick={this.handleMakeReply}>Reply</button>}
-                    <br/>
-                    <Replies updateRep={this.updateReply} removeRep={this.removeReply} replies={this.state.replies} userID={this.props.userID}/>
+                    }
+                    <div className='box is-shadowless'>
+                        <Replies updateRep={this.updateReply} removeRep={this.removeReply} replies={this.state.replies} userID={this.props.userID}/>
+                    </div>
                   </div>
         );
     }
