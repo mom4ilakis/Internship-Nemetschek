@@ -1,8 +1,8 @@
 import graphene
 from datetime import date
 import random
-import asyncio
-
+import time
+from collections import deque
 
 players = []
 
@@ -90,7 +90,11 @@ class Subscription(graphene.ObjectType):
 
     async def resolve_player_added(parrent, info):
         print('Sub activated\n')
-        yield next(players, None)
+        player_queue = deque(players)
+
+        while player_queue.count != 0:
+            time.sleep(3)
+            yield player_queue.popleft()
 
 
 class Mutations(graphene.ObjectType):
